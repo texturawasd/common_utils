@@ -1,4 +1,8 @@
+*.out
+*.txt
+*.md
 *.c
 !elevate.c
 !have.c
 !string_utils.c
+!which_os.c
