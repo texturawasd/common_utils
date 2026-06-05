@@ -58,24 +58,24 @@ const char *try_to_determine_linux_distro() {
 }
 
 #elif defined(__APPLE__) && defined(__MACH__)
-os = "macos";
-#elif defined(__unix__)
-os = "unix";
+const char *os = "macos";
 #elif defined(__FreeBSD__)
-os = "freebsd";
+const char *os = "freebsd";
 #elif defined(__NetBSD__)
-os = "netbsd";
+const char *os = "netbsd";
 #elif defined(__OpenBSD__)
-os = "openbsd";
+const char *os = "openbsd";
 #elif defined(__DragonFly__)
-os = "dragonfly";
+const char *os = "dragonfly";
 #elif defined(__sun) && defined(__SVR4)
-os = "solaris";
+const char *os = "solaris";
 #elif defined(__hpux)
-os = "hpux";
+const char *os = "hpux";
 #elif defined(__aix)
-os = "aix";
+const char *os = "aix";
+#elif defined(__unix__)
+const char *os = "unix";
 #else
-os = "unknown";
+const char *os = "unknown";
 #endif
 #endif /* WHICH_OS */
