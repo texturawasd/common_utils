@@ -1,3 +1,4 @@
 *.c
 !elevate.c
 !have.c
+!string_utils.c
