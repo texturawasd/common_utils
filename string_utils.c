@@ -80,4 +80,33 @@ void join_strings(char **dst, size_t *used, const char *sep, const char **strs, 
         append(dst, used, strs[i]);
     }
 }
+
+/* gets the "substring" in quotes (`""`) from the input string. example:
+ input is `dasda"fls"ghj`, then output is `fls`*/
+char *get_quoted_substring(const char *str)
+{
+    if (!str)
+        return NULL;
+
+    const char *start = strchr(str, '"');
+    if (!start)
+        return NULL;
+
+    start++; // move past opening quote
+
+    const char *end = strchr(start, '"');
+    if (!end)
+        return NULL;
+
+    size_t len = end - start;
+
+    char *result = malloc(len + 1);
+    if (!result)
+        return NULL;
+
+    memcpy(result, start, len);
+    result[len] = '\0';
+
+    return result;
+}
 #endif /* TEXTURAWASD_STRINGS */
