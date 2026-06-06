@@ -10,9 +10,52 @@
 const char *os;
 
 #if defined(_WIN32) || defined(_WIN64)
-os = "windows";
+#include <windows.h>
+#include <winternl.h>
+
+const char *try_to_determine_windows_version(void)
+{
+    RTL_OSVERSIONINFOW ver = {0};
+    ver.dwOSVersionInfoSize = sizeof(ver);
+
+    typedef LONG (WINAPI *RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
+
+    HMODULE hMod = GetModuleHandleW(L"ntdll.dll");
+    if (!hMod)
+        return "windows";
+
+    RtlGetVersionPtr RtlGetVersion =
+        (RtlGetVersionPtr)GetProcAddress(hMod, "RtlGetVersion");
+
+    if (!RtlGetVersion)
+        return "windows";
+
+    if (RtlGetVersion(&ver) != 0)
+        return "windows";
+
+    if (ver.dwMajorVersion == 6) {
+        switch (ver.dwMinorVersion) {
+        case 1: return "windows7";
+        case 2: return "windows8";
+        case 3: return "windows8.1";
+        }
+    }
+
+    if (ver.dwMajorVersion == 10) {
+        /* Windows 11 starts at build 22000 */
+        if (ver.dwBuildNumber >= 22000) {
+            return "windows11";
+        } else {
+            return "windows10";
+        }
+    }
+
+    return "windows";
+}
 #elif defined(__linux__)
 
+
+// remember to free the returned string after use
 const char *try_to_determine_linux_distro() {
     if (command_exists("lsb_release")) {
         // lsb_release is a common tool to get Linux distribution information
