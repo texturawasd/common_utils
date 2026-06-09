@@ -56,7 +56,7 @@ const char *try_to_determine_windows_version(void)
 
 
 // remember to free the returned string after use
-const char *try_to_determine_linux_distro() {
+const char *try_to_determine_linux_distro(const bool like) {
     if (command_exists("lsb_release")) {
         // lsb_release is a common tool to get Linux distribution information
         // We can use it to get the distro name
@@ -76,17 +76,32 @@ const char *try_to_determine_linux_distro() {
         if (fp) {
             char line[256];
             while (fgets(line, sizeof(line), fp)) {
-                if (strncmp(line, "ID=", 3) == 0) {
-                    // Extract the ID value
-                    char *id = line + 3;
-                    // Remove any surrounding quotes and trailing newline
-                    id[strcspn(id, "\n")] = 0;
-                    if (*id == '"' || *id == '\'') {
-                        id++;
-                        id[strcspn(id, "\"'")] = 0;
+                if (like) { // from ID_LIKE
+                    if (strncmp(line, "ID_LIKE=", 8) == 0) {
+                        // Extract the ID value
+                        char *id = line + 8;
+                        // Remove any surrounding quotes and trailing newline
+                        id[strcspn(id, "\n")] = 0;
+                        if (*id == '"' || *id == '\'') {
+                            id++;
+                            id[strcspn(id, "\"'")] = 0;
+                        }
+                        os = strdup(id);
+                        break;
                     }
-                    os = strdup(id);
-                    break;
+                } else if (!like) { // from ID
+                    if (strncmp(line, "ID=", 3) == 0) {
+                        // Extract the ID value
+                        char *id = line + 3;
+                        // Remove any surrounding quotes and trailing newline
+                        id[strcspn(id, "\n")] = 0;
+                        if (*id == '"' || *id == '\'') {
+                            id++;
+                            id[strcspn(id, "\"'")] = 0;
+                        }
+                        os = strdup(id);
+                        break;
+                    }
                 }
             }
             fclose(fp);
