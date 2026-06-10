@@ -50,4 +50,40 @@ int command_exists(const char *command)
 	free(path_copy);
 	return found;
 }
+
+const char *which(const char *command) {
+	if (command == NULL || *command == '\0') {
+		return NULL;
+	}
+
+	if (strchr(command, '/')) {
+		return access(command, X_OK) == 0 ? command : NULL;
+	}
+
+	const char *path_env = getenv("PATH");
+	if (!path_env) { return NULL; }
+
+	char *path_copy = strdup(path_env);
+	if (!path_copy) { return NULL; }
+
+	const char *result = NULL;
+	char *dir = strtok(path_copy, ":");
+
+	while (dir) {
+		char fullpath[PATH_MAX];
+
+		if (snprintf(fullpath, sizeof(fullpath),
+					"%s/%s", dir, command) < (int)sizeof(fullpath)) {
+			if (access(fullpath, X_OK) == 0) {
+				result = strdup(fullpath);
+				break;
+			}
+		}
+
+		dir = strtok(NULL, ":");
+	}
+
+	free(path_copy);
+	return result;
+}
 #endif /* HAVE */

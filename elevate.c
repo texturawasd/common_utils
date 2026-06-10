@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "have.c"
-#include "string_utils.c"
 
 /* determine which privilege elevator program, sudo or doas, is available. checks for sudo first, then doas */
 const char* determine_elevator() {
@@ -96,10 +95,11 @@ static char *shell_single_quote(const char *s)
     size_t len = 2; /* opening + closing quote */
 
     for (const char *p = s; *p; p++) {
-        if (*p == '\'')
+        if (*p == '\'') {
             len += 4; /* '\'' */
-        else
+        } else {
             len += 1;
+        }
     }
 
     char *out = malloc(len + 1);
@@ -134,7 +134,7 @@ static char *examine_command_and_insert_elevator(const char *command)
         char *quoted = shell_single_quote(command);
 
         size_t len =
-            strlen(elevator) +
+            strlen(elevator)  +
             strlen(" sh -c ") +
             strlen(quoted);
 
@@ -173,10 +173,13 @@ static char *examine_command_and_insert_elevator(const char *command)
                 p++;
             }
 
-            if (!*p)
+            if (!*p) {
                 break;
+            }
 
-            append(&out, &used, elevator);
+            size_t elen = strlen(elevator);
+            memcpy(out + used, elevator, elen);
+            used += elen;
             out[used++] = ' ';
 
             need_elevator = false;
@@ -243,7 +246,7 @@ static char *examine_command_and_insert_elevator(const char *command)
 /* elevate a commmand by inserting sudo or doas where needed
  example:
  input: `apt update && apt upgrade` (notice that's two commands) will
- output: `sudo apt updatee && sudo apt upgrade` (notice sudo (or doas) is
+ output: `sudo apt update && sudo apt upgrade` (notice sudo (or doas) is
  inserted where needed, not just at the begninning)
  NOTE: you must free it */
 const char *elevate_command(const char *command) {
