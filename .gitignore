@@ -6,3 +6,4 @@
 !have.c
 !string_utils.c
 !which_os.c
+!process_utils.c
