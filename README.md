@@ -1,6 +1,6 @@
 # Common utils
 
-these are simple functions that are likely to be reused across different
+these are simple functions that are likely to be reused across different programs or stuff
 
 includes:
 ### elevate
