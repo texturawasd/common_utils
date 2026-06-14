@@ -23,6 +23,8 @@ typedef struct String {
 
 #define str string
 
+#define NULL_STRING str_create("")
+
 /*
  * Constructors and Memory Management
  */
