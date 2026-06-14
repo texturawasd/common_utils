@@ -55,3 +55,10 @@ Functions:
 - `int run_quiet(const char *cmd)` - runs a thing and explicitly discards the output
 - `bool is_process_running(pid_t pid)` - shorthand to check if the is running
 - `pid_t pidof(const char *name)` - pidof without shelling out
+
+### path_utils
+- `str expand_home(const char *path)` - expands a path string with `~` in it
+- `str path_join(const char *a, const char *b)` - joins two paths
+- `str canonical_path(const char *path)` - get the actual, real path
+- `str file_extension(const char *path)` - get the file extension of the given file. Not for hidden files or files wit no extension.
+- `str tidy_up_path(const char *path)` - clean up the path (remove duplicated `/`, only leave the final `/` if the last item is actually a directory)
