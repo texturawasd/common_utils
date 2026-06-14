@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 
+/* old function that just runs a thing, not saving the output */
 int run(const char *cmd)
 {
     FILE *pipe = popen(cmd, "r");
@@ -22,6 +23,7 @@ int run(const char *cmd)
     return WIFEXITED(status) ? WEXITSTATUS(status) : -1;
 }
 
+/* note: free it, will you? */
 char *capture_output(const char *cmd)
 {
     char *output = NULL;
@@ -48,6 +50,7 @@ char *capture_output(const char *cmd)
     return output;
 }
 
+/* runs a thing and explicitly throws out the output*/
 int run_quiet(const char *cmd)
 {
     char full_cmd[512];
@@ -60,13 +63,15 @@ int run_quiet(const char *cmd)
     return WIFEXITED(status) ? WEXITSTATUS(status) : -1;
 }
 
-bool process_running(pid_t pid)
+/* shorthand to check if its running */
+bool is_process_running(pid_t pid)
 {
     char cmd[32];
     snprintf(cmd, sizeof(cmd), "kill -0 %d 2>/dev/null", (int)pid);
     return run_quiet(cmd) == 0;
 }
 
+/* pidof without shelling out */
 pid_t pidof(const char *name)
 {
     char cmd[256];
