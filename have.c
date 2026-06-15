@@ -1,3 +1,5 @@
+/* compat: for unix-like systems only */
+
 #ifndef HAVE
 #define HAVE
 

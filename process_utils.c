@@ -1,3 +1,5 @@
+/* compat: for unix-like systems only (note: for now only tested on linux) */
+
 #ifndef TEXTURAWASD_PROCESS_UTILS
 #define TEXTURAWASD_PROCESS_UTILS
 

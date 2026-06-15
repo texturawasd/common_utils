@@ -1,3 +1,5 @@
+/* compat: pure C */
+
 #ifndef TEXTURAWASD_STRINGS
 #define TEXTURAWASD_STRINGS
 

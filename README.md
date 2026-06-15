@@ -1,6 +1,10 @@
 # Common utils
 
-these are simple functions that are likely to be reused across different programs or stuff - stuff i'd expect to find in the standard library of a modern higher-level language
+these are simple functions that are likely to be reused across different programs or stuff - stuff i'd expect to find in the standard library of a modern higher-level
+language. Small, meant to just be compiled in
+
+## compatibility:
+some of these are "pure C" meaning they will (or at least, should) run anywhere C can, within reason. Others are for unix-like systems only. This is specified with the comment in the first line of all them.
 
 includes:
 ### elevate

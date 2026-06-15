@@ -1,3 +1,5 @@
+/* compat: for unix-like systems only */
+
 #ifndef _DO_AS_I_SAY
 #error THIS SERVER IS NOT UP TO STANDARDS, DO NOT USE IT. It is an example server.
 #endif

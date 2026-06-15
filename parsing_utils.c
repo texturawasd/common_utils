@@ -1,18 +1,66 @@
+/* compat: pure C */
+
 #ifndef TEXTURAWASD_PARSING
 #define TEXTURAWASD_PARSING
 
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
 
-int parse_int(const char *s, int *out)
+/* strcasecmp is not part of C proper, so */
+static int strcasecmp_local(const char *a, const char *b)
 {
-    #error unimplemented
+    while (*a && *b) {
+
+        int ca = tolower((unsigned char)*a);
+        int cb = tolower((unsigned char)*b);
+
+        if (ca != cb)
+            return ca - cb;
+
+        a++;
+        b++;
+    }
+
+    return tolower((unsigned char)*a)
+         - tolower((unsigned char)*b);
+}
+#define _strcasecmp strcasecmp_local
+
+/* Parse a string into an integer */
+int parse_int(const char *s)
+{
+    if (!s) {
+        return 0;
+    }
+
+    char *endptr;
+    long val = strtol(s, &endptr, 10);
+
+    if (*endptr != '\0') {
+        return 0;
+    }
+
+    return (int)val;
 }
 
+/* Parse a string into a long integer */
 long parse_long(const char *s)
 {
-    #error unimplemented
+    if (!s) {
+        return 0;
+    }
+
+    char *endptr;
+    long val = strtol(s, &endptr, 10);
+
+    if (*endptr != '\0') {
+        return 0;
+    }
+
+    return val;
 }
 
 /*
@@ -24,19 +72,19 @@ bool parse_bool(const char *s)
 {
     if (!s) {
         return false;
-    } else if (strcasecmp(s, "true") == 0
+    } else if (_strcasecmp(s, "true") == 0
             ||     strcmp(s, "1") == 0
-            || strcasecmp(s, "yes") == 0
-            || strcasecmp(s, "on") == 0
-            || strcasecmp(s, "enable") == 0
-            || strcasecmp(s, "enabled") == 0
+            || _strcasecmp(s, "yes") == 0
+            || _strcasecmp(s, "on") == 0
+            || _strcasecmp(s, "enable") == 0
+            || _strcasecmp(s, "enabled") == 0
               ) { return true;
-    } else if (strcasecmp(s, "false") == 0
+    } else if (_strcasecmp(s, "false") == 0
             ||     strcmp(s, "0") == 0
-            || strcasecmp(s, "no") == 0
-            || strcasecmp(s, "off") == 0
-            || strcasecmp(s, "disable") == 0
-            || strcasecmp(s, "disabled") == 0
+            || _strcasecmp(s, "no") == 0
+            || _strcasecmp(s, "off") == 0
+            || _strcasecmp(s, "disable") == 0
+            || _strcasecmp(s, "disabled") == 0
               ) { return false;
     }
     return false;

@@ -1,3 +1,5 @@
+/* compat: for unix-like systems only */
+
 #ifndef TEXTURAWASD_PATH_UTILS
 #define TEXTURAWASD_PATH_UTILS
 

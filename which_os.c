@@ -1,3 +1,5 @@
+/* compat: pure C */
+
 #ifndef WHICH_OS
 #define WHICH_OS
 
