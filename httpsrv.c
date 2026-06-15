@@ -26,7 +26,7 @@ void handle_sigint(int sig){
     running = 0;    /* just set the flag to 0 */
 }
 
-int main(void)
+int http_server(void)
 {
     struct sigaction sa = {0};
     sa.sa_handler = handle_sigint;
