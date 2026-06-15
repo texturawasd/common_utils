@@ -8,3 +8,4 @@
 !which_os.c
 !process_utils.c
 !path_utils.c
+!httpsrv.c
