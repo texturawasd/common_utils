@@ -19,9 +19,9 @@
 #endif
 #define BUFFER_SIZE 4096
 
-volatile sig_atomic_t running = 1;
+static volatile sig_atomic_t running = 1;
 
-void handle_sigint(int sig){
+static void handle_sigint(int sig){
     (void)sig;      /* unused */
     running = 0;    /* just set the flag to 0 */
 }
@@ -29,11 +29,16 @@ void handle_sigint(int sig){
 #ifdef _STANDALONE_HTTPSRV
 int main(int argc, char **argv)
 #else
-int http_server(int argc, char **argv)
+int http_server(const char *file_to_serve)
 #endif
 {
+    (void)argc;     /* unused */
     /* get which file to serve: */
-    const char *FILE_TO_SERVE = argv[1]? argv[1] : "index.html"; ;
+    #ifdef _STANDALONE_HTTPSRV
+    const char *FILE_TO_SERVE = argv[1]? argv[1] : "index.html";
+    #else
+    const char *FILE_TO_SERVE = file_to_serve? file_to_serve : "index.html";
+    #endif
 
     struct sigaction sa = {0};
     sa.sa_handler = handle_sigint;
@@ -116,6 +121,6 @@ int http_server(int argc, char **argv)
 
     /* cleanup SHOULD happen here*/
 
-    return EXIT_SUCCESS;
+    return EXIT_SUCCESS; /* fixme */
 }
 #endif
