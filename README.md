@@ -1,6 +1,6 @@
 # Common utils
 
-these are simple functions that are likely to be reused across different programs or stuff
+these are simple functions that are likely to be reused across different programs or stuff - stuff i'd expect to find in the standard library of a modern higher-level language
 
 includes:
 ### elevate
@@ -62,3 +62,6 @@ Functions:
 - `str canonical_path(const char *path)` - get the actual, real path
 - `str file_extension(const char *path)` - get the file extension of the given file. Not for hidden files or files wit no extension.
 - `str tidy_up_path(const char *path)` - clean up the path (remove duplicated `/`, only leave the final `/` if the last item is actually a directory)
+
+### httpsrv
+- `int http_server(int argc, char **argv)` - serves a file. defaults to "index.html" if !argv[1]
