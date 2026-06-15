@@ -1,8 +1,8 @@
 #ifndef _DO_AS_I_SAY
-#error THIS SERVER IS NOT UP TO STANDARDS, DO NOT USE IT. It is an example server
+#error THIS SERVER IS NOT UP TO STANDARDS, DO NOT USE IT. It is an example server.
 #endif
 
-/* simple HTTP server. */
+/* simple HTTP server. Serves argv[1], or "index.html" */
 #ifdef _DO_AS_I_SAY
 
 #include <stdio.h>
@@ -26,8 +26,15 @@ void handle_sigint(int sig){
     running = 0;    /* just set the flag to 0 */
 }
 
-int http_server(void)
+#ifdef _STANDALONE_HTTPSRV
+int main(int argc, char **argv)
+#else
+int http_server(int argc, char **argv)
+#endif
 {
+    /* get which file to serve: */
+    const char *FILE_TO_SERVE = argv[1]? argv[1] : "index.html"; ;
+
     struct sigaction sa = {0};
     sa.sa_handler = handle_sigint;
     sigemptyset(&sa.sa_mask);
@@ -68,7 +75,7 @@ int http_server(void)
         char request[BUFFER_SIZE];
         read(client, request, sizeof(request) - 1);
 
-        FILE *f = fopen("index.html", "rb");
+        FILE *f = fopen(FILE_TO_SERVE, "rb");
         if (!f) { puts("[!!!!!]: file index.html not found");
         const char *notfound =
             "HTTP/1.1 404 not found :(\r\n"
