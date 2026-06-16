@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "string_utils.c"
+
 /* Internal helpers */
 
 /*
@@ -28,22 +30,22 @@ static const char *strip_prefix(const char *arg)
  * extract its key (the part before '=') into key_out (caller supplies buffer).
  * Returns a pointer to the value (part after '='), or NULL if no '=' present.
  */
-static const char *split_key_value(const char *raw, char *key_out, size_t key_out_size)
+static str split_key_value(const char *raw, char *key_out, size_t key_out_size)
 {
-    const char *stripped = strip_prefix(raw);
-    const char *eq = strchr(stripped, '=');
+    str stripped = str_create(strip_prefix(raw));
+    str eq = str_create(strchr(stripped.data, '='));
 
-    if (eq == NULL) {
-        snprintf(key_out, key_out_size, "%s", stripped);
-        return NULL;
+    if (eq.data == NULL) {
+        snprintf(key_out, key_out_size, "%s", stripped.data);
+        return NULL_STRING;
     }
 
-    size_t key_len = (size_t)(eq - stripped);
+    size_t key_len = (size_t)(eq.data - stripped.data);
     if (key_len >= key_out_size) key_len = key_out_size - 1;
-    memcpy(key_out, stripped, key_len);
+    memcpy(key_out, stripped.data, key_len);
     key_out[key_len] = '\0';
 
-    return eq + 1;
+    return str_create(eq.data + 1);
 }
 
 /* API */
@@ -71,8 +73,8 @@ bool arg_is_present_with_value(const char *arg, const char *value, int argc, cha
 {
     for (int i = 1; i < argc; i++) {
         char key[256];
-        const char *val = split_key_value(argv[i], key, sizeof(key));
-        if (strcmp(key, arg) == 0 && val != NULL && strcmp(val, value) == 0)
+        str val = split_key_value(argv[i], key, sizeof(key));
+        if (strcmp(key, arg) == 0 && val.data != NULL && strcmp(val.data, value) == 0)
             return true;
     }
     return false;
@@ -116,14 +118,14 @@ bool arg_is_in_list(const char *arg, const char *list)
  * string - do not free it.
  *   --dir=/var/www/files  =>  get_arg_value("dir", ...) returns "/var/www/files"
  */
-const char *get_arg_value(const char *arg, int argc, char **argv)
+str get_arg_value(const char *arg, int argc, char **argv)
 {
     for (int i = 1; i < argc; i++) {
         char key[256];
-        const char *val = split_key_value(argv[i], key, sizeof(key));
+        str val = split_key_value(argv[i], key, sizeof(key));
         if (strcmp(key, arg) == 0) return val;
     }
-    return NULL;
+    return NULL_STRING;
 }
 
 /*
@@ -132,9 +134,9 @@ const char *get_arg_value(const char *arg, int argc, char **argv)
  */
 bool config_arg_is_val(const char *key, const char *val, int argc, char **argv)
 {
-    const char *found = get_arg_value(key, argc, argv);
-    if (found == NULL) return false;
-    return strcmp(found, val) == 0;
+    str found = get_arg_value(key, argc, argv);
+    if (found.data == NULL) return false;
+    return strcmp(found.data, val) == 0;
 }
 
 #endif /* TEXTURAWASD_ARGS */
