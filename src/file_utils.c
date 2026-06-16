@@ -1,9 +1,8 @@
-#ifndef TEXTURAWASD_FILE_UTILS
-#define TEXTURAWASD_FILE_UTILS
+/* compat: i don't know */
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include "string_utils.c"
+#include "../simple_strings.h"
 #include <stdio.h>
 #include <sys/stat.h>
 #include <string.h>
@@ -179,6 +178,7 @@ bool file_is_lines_long(const char *path, int line_count, const char *least_or_m
     /* Exact mode */
     return count == line_count;
 }
+
 /* Read a specified number of lines from a file */
 str read_lines(const char *path, int line_count, bool skip_empty, bool trim_newline)
 {
@@ -232,5 +232,3 @@ str read_lines(const char *path, int line_count, bool skip_empty, bool trim_newl
     fclose(file);
     return result;
 }
-
-#endif /* TEXTURAWASD_FILE_UTILS */

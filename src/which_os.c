@@ -1,15 +1,12 @@
 /* compat: pure C */
 
-#ifndef WHICH_OS
-#define WHICH_OS
-
-#include "have.c"
+#include "../have.h"
 
 /*
  * WHICH_OS -- try my best guess to see which OS i'm running on.
  */
 
-const char *os;
+ const char *os;
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
@@ -138,4 +135,3 @@ const char *os = "unix";
 #else
 const char *os = "unknown";
 #endif
-#endif /* WHICH_OS */

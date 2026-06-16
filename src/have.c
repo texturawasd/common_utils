@@ -1,14 +1,12 @@
 /* compat: for unix-like systems only */
 
-#ifndef HAVE
-#define HAVE
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <limits.h>
 #include <stdbool.h>
+
 
 /*
  * HAVE -- returns 1 if the command is found in PATH and executable,
@@ -88,4 +86,3 @@ const char *which(const char *command) {
 	free(path_copy);
 	return result;
 }
-#endif /* HAVE */

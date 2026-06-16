@@ -2,15 +2,12 @@
 
 /* abstraction for arguments */
 
-#ifndef TEXTURAWASD_ARG
-#define TEXTURAWASD_ARG
-
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "string_utils.c"
+#include "../simple_strings.h"
 
 /* Internal helpers */
 
@@ -141,5 +138,3 @@ bool config_arg_is_val(const char *key, const char *val, int argc, char **argv)
     if (found.data == NULL) return false;
     return strcmp(found.data, val) == 0;
 }
-
-#endif /* TEXTURAWASD_ARGS */

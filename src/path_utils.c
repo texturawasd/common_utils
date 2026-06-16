@@ -1,14 +1,12 @@
 /* compat: for unix-like systems only */
 
-#ifndef TEXTURAWASD_PATH_UTILS
-#define TEXTURAWASD_PATH_UTILS
-
 #include <linux/limits.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include "string_utils.c"
+#include "../simple_strings.h"
 
 /* expand `~` to home directory of the user */
 str expand_home(const char *path)
@@ -161,4 +159,3 @@ str tidy_up_path(const char *path)
 
     return out;
 }
-#endif /* TEXTURAWASD_PATH_UTILS */

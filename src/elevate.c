@@ -1,14 +1,11 @@
 /* compat: for unix-like systems only */
 
-#ifndef ELEVATE
-#define ELEVATE
-
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "have.c"
+#include "../have.h"
 
 /* determine which privilege elevator program, sudo or doas, is available. checks for sudo first, then doas */
 const char* determine_elevator() {
@@ -271,4 +268,3 @@ const char *elevate_command(const char *command) {
     return examine_command_and_insert_elevator(command);
 }
 
-#endif /* ELEVATE */

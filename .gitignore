@@ -1,14 +1,4 @@
 *.out
 *.txt
 *.md
-*.c
-!elevate.c
-!have.c
-!string_utils.c
-!which_os.c
-!process_utils.c
-!path_utils.c
-!httpsrv.c
-!parsing_utils.c
-!args.c
-!file_utils.c
+others/

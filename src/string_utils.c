@@ -1,31 +1,14 @@
 /* compat: pure C */
 
-#ifndef TEXTURAWASD_STRINGS
-#define TEXTURAWASD_STRINGS
-
-/* June 2026 */
+#define _SIMPLE_STRINGS_IMPL
+/* texturawasd - June 2026 */
 
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
 
-/*
- * Strings, but they feel natural, but they're a string.
- * rule of thumb: `String str; str.data` is the same as `char *str; str` in normal C.
- * that's the idiomatic way to use it as a normal C string.
- */
-
-
-typedef struct String {
-    char *data;
-    size_t len;
-    size_t cap;
-} string;
-
-#define str string
-
-#define NULL_STRING str_create("")
+#include "../simple_strings.h"
 
 /*
  * Constructors and Memory Management
@@ -38,7 +21,7 @@ str str_create(const char *src)
     if (src) {
         size_t len = strlen(src);
         s.cap = len + 1;
-        s.data = malloc(s.cap);
+        s.data = (char *)malloc(s.cap);
         if (s.data) {
             memcpy(s.data, src, len);
             s.data[len] = '\0';
@@ -46,7 +29,7 @@ str str_create(const char *src)
         }
     } else {
         s.cap = 1;
-        s.data = malloc(1);
+        s.data = (char *)malloc(1);
         if (s.data) {
             s.data[0] = '\0';
             s.len = 0;
@@ -60,7 +43,7 @@ str str_with_cap(size_t cap)
 {
     str s = {0};
     s.cap = cap > 0 ? cap : 1;
-    s.data = malloc(s.cap);
+    s.data = (char *)malloc(s.cap);
     if (s.data) {
         s.data[0] = '\0';
         s.len = 0;
@@ -105,7 +88,7 @@ static void str_grow(str *s, size_t additional)
         new_cap *= 2;
     }
 
-    char *new_data = realloc(s->data, new_cap);
+    char *new_data = (char *)realloc(s->data, new_cap);
     if (new_data) {
         s->data = new_data;
         s->cap = new_cap;
@@ -318,7 +301,7 @@ str str_quoted_substring(const char *src)
         free(s.data);
     }
     s.cap = len + 1;
-    s.data = malloc(s.cap);
+    s.data = (char *)malloc(s.cap);
     if (s.data) {
         memcpy(s.data, start, len);
         s.data[len] = '\0';
@@ -386,7 +369,7 @@ str str_replace(const char *src, const char *old, const char *new_str)
         size_t len = match - ptr;
 
         if (len > 0) {
-            char *tmp = malloc(len + 1);
+            char *tmp = (char *)malloc(len + 1);
             if (tmp) {
                 memcpy(tmp, ptr, len);
                 tmp[len] = '\0';
@@ -440,4 +423,3 @@ str str_remove_suffix(const char *src, const char *suffix)
 
     return str_create(src);
 }
-#endif /* TEXTURAWASD_STRINGS */

@@ -1,8 +1,5 @@
 /* compat: for unix-like systems only (note: for now only tested on linux) */
 
-#ifndef TEXTURAWASD_PROCESS_UTILS
-#define TEXTURAWASD_PROCESS_UTILS
-
 #include <stdbool.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -87,5 +84,3 @@ pid_t pidof(const char *name)
     free(output);
     return pid > 0 ? pid : -1;
 }
-
-#endif /* TEXTURAWASD_PROCESS_UTILS */

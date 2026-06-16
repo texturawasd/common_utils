@@ -78,6 +78,5 @@ Functions:
 - `bool file_is_lines_long(const char *path, int line_count, const char *least_or_most)` - the third argument can be `"least"` to check if the file is at ~ _`line_count`_ lines long, `"most"` ~~, and `NULL` to check if the file is *exactly* _`line_count`_ lines long
 - `str read_lines(const char *path, int line_count, bool skip_empty, bool trim_newline)`
 
-
 ### httpsrv
 - `int http_server(const char *file_to_serve_path)` - serves a file. defaults to "index.html" if no file is specified. (if defined _STANDALONE_HTTPSRV, function is int main(int argc, char **argv))

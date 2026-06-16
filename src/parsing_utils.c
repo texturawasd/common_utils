@@ -1,8 +1,5 @@
 /* compat: pure C */
 
-#ifndef TEXTURAWASD_PARSING
-#define TEXTURAWASD_PARSING
-
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
@@ -113,5 +110,3 @@ bool is_numeric(const char *s)
     }
     return is_numeric;
 }
-
-#endif /* TEXTURAWASD_PARSING */
