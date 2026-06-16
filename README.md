@@ -67,5 +67,17 @@ Functions:
 - `str file_extension(const char *path)` - get the file extension of the given file. Not for hidden files or files wit no extension.
 - `str tidy_up_path(const char *path)` - clean up the path (remove duplicated `/`, only leave the final `/` if the last item is actually a directory)
 
+### file_utils
+- `bool file_exists(const char *path)`
+- `bool dir_exists(const char *path)`
+- `bool is_symlink(const char *path)`
+- `size_t file_size(const char *path)` in bytes
+- `str read_entire_file(const char *path)`
+- `void write_entire_file(const char *path, const char *contents)`
+- `int file_line_count(const char *path)`
+- `bool file_is_lines_long(const char *path, int line_count, const char *least_or_most)` - the third argument can be `"least"` to check if the file is at ~ _`line_count`_ lines long, `"most"` ~~, and `NULL` to check if the file is *exactly* _`line_count`_ lines long
+- `str read_lines(const char *path, int line_count, bool skip_empty, bool trim_newline)`
+
+
 ### httpsrv
 - `int http_server(const char *file_to_serve_path)` - serves a file. defaults to "index.html" if no file is specified. (if defined _STANDALONE_HTTPSRV, function is int main(int argc, char **argv))
