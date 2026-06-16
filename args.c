@@ -33,19 +33,22 @@ static const char *strip_prefix(const char *arg)
 static str split_key_value(const char *raw, char *key_out, size_t key_out_size)
 {
     str stripped = str_create(strip_prefix(raw));
-    str eq = str_create(strchr(stripped.data, '='));
+    const char *eq_pos = strchr(stripped.data, '=');
 
-    if (eq.data == NULL) {
+    if (eq_pos == NULL) {
         snprintf(key_out, key_out_size, "%s", stripped.data);
+        str_destroy(&stripped);
         return NULL_STRING;
     }
 
-    size_t key_len = (size_t)(eq.data - stripped.data);
+    size_t key_len = (size_t)(eq_pos - stripped.data);
     if (key_len >= key_out_size) key_len = key_out_size - 1;
     memcpy(key_out, stripped.data, key_len);
     key_out[key_len] = '\0';
 
-    return str_create(eq.data + 1);
+    str result = str_create(eq_pos + 1);
+    str_destroy(&stripped);
+    return result;
 }
 
 /* API */
