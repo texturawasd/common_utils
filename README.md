@@ -15,7 +15,7 @@ includes:
 - `int command_exists(const char *command)` - `0` if it doesn't, `1` if it does
 - `const char *which(const char *command)` - you should know what which is
 
-### string_utils
+### simple_strings
 A very simple strings implementation for C. (not professional do not use for anything load-bearing). The struct struct looks like this:
 ```c
 typedef struct String {
