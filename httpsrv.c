@@ -4,7 +4,7 @@
 #error THIS SERVER IS NOT UP TO STANDARDS, DO NOT USE IT. It is an example server.
 #endif
 
-/* simple HTTP server. Serves argv[1], or "index.html" */
+/* simple HTTP server. Serves argv[1], or "index.html"; port is argv[2] or 80 */
 #ifdef _DO_AS_I_SAY
 
 #include <stdio.h>
@@ -16,9 +16,6 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-#ifndef PORT
-#define PORT        80
-#endif
 #define BUFFER_SIZE 4096
 
 static volatile sig_atomic_t running = 1;
@@ -31,7 +28,7 @@ static void handle_sigint(int sig){
 #ifdef _STANDALONE_HTTPSRV
 int main(int argc, char **argv)
 #else
-int http_server(const char *file_to_serve_path)
+int http_server(const char *file_to_serve_path, int port)
 #endif
 {
     #ifdef _STANDALONE_HTTPSRV
@@ -40,6 +37,7 @@ int http_server(const char *file_to_serve_path)
     /* get which file to serve: */
     #ifdef _STANDALONE_HTTPSRV
     const char *FILE_TO_SERVE = argv[1]? argv[1] : "index.html";
+    int port = argv[2]? atoi(argv[2]) : 80;
     #else
     const char *FILE_TO_SERVE = file_to_serve_path? file_to_serve_path : "index.html";
     #endif
@@ -60,7 +58,7 @@ int http_server(const char *file_to_serve_path)
     struct sockaddr_in addr = {0};
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(PORT);
+    addr.sin_port = htons(port);
 
     if (bind(server_fd, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
         perror("bind");
@@ -76,7 +74,7 @@ int http_server(const char *file_to_serve_path)
     do {
     #endif
         /* server shall serve now */
-        printf("serving on port %d\n", PORT);
+        printf("serving on port %d\n", port);
 
         int client = accept(server_fd, NULL, NULL);
         if (client < 0)
