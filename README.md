@@ -68,4 +68,4 @@ Functions:
 - `str tidy_up_path(const char *path)` - clean up the path (remove duplicated `/`, only leave the final `/` if the last item is actually a directory)
 
 ### httpsrv
-- `int http_server(const char *file_to_serve)` - serves a file. defaults to "index.html" if no file is specified. (if defined _STANDALONE_HTTPSRV, function is int main(int argc, char **argv))
+- `int http_server(const char *file_to_serve_path)` - serves a file. defaults to "index.html" if no file is specified. (if defined _STANDALONE_HTTPSRV, function is int main(int argc, char **argv))

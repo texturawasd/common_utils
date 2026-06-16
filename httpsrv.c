@@ -31,15 +31,17 @@ static void handle_sigint(int sig){
 #ifdef _STANDALONE_HTTPSRV
 int main(int argc, char **argv)
 #else
-int http_server(const char *file_to_serve)
+int http_server(const char *file_to_serve_path)
 #endif
 {
+    #ifdef _STANDALONE_HTTPSRV
     (void)argc;     /* unused */
+    #endif
     /* get which file to serve: */
     #ifdef _STANDALONE_HTTPSRV
     const char *FILE_TO_SERVE = argv[1]? argv[1] : "index.html";
     #else
-    const char *FILE_TO_SERVE = file_to_serve? file_to_serve : "index.html";
+    const char *FILE_TO_SERVE = file_to_serve_path? file_to_serve_path : "index.html";
     #endif
 
     struct sigaction sa = {0};
@@ -77,23 +79,33 @@ int http_server(const char *file_to_serve)
         printf("serving on port %d\n", PORT);
 
         int client = accept(server_fd, NULL, NULL);
-        if (client < 0) continue;
+        if (client < 0)
+        #ifndef _ONESHOT_HTTPSRV
+        continue;
+        #else
+        { perror("accept"); return EXIT_FAILURE; }
+        #endif
 
         char request[BUFFER_SIZE];
         read(client, request, sizeof(request) - 1);
 
         FILE *f = fopen(FILE_TO_SERVE, "rb");
-        if (!f) { puts("[!!!!!]: file index.html not found");
-        const char *notfound =
-            "HTTP/1.1 404 not found :(\r\n"
-            "Content-Type: text/plain\r\n"
-            "Content-Length: 13\r\n"
-            "Connection: close\r\n"
-            "\r\n"
-            "404 Not Found";
-        write(client, notfound, strlen(notfound));
-        close(client);
-        continue; }
+        if (!f) { puts("[!!!!!]: file not found"); puts(FILE_TO_SERVE);
+            const char *notfound =
+                "HTTP/1.1 404 not found :(\r\n"
+                "Content-Type: text/plain\r\n"
+                "Content-Length: 13\r\n"
+                "Connection: close\r\n"
+                "\r\n"
+                "404 Not Found";
+            write(client, notfound, strlen(notfound));
+            close(client);
+            #ifndef _ONESHOT_HTTPSRV
+            continue;
+            #else
+            return EXIT_SUCCESS;
+            #endif
+            }
 
         fseek(f, 0, SEEK_END);
         long len = ftell(f);
