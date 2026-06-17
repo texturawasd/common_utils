@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../simple_strings.h"
+#include "../args.h"
 
 /* Internal helpers */
 

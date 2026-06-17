@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "../elevate.h"
 #include "../have.h"
 
 /* determine which privilege elevator program, sudo or doas, is available. checks for sudo first, then doas */

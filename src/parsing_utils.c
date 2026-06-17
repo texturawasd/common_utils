@@ -3,8 +3,9 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
-#include <ctype.h>
 #include <stdlib.h>
+
+#include "../parsing_utils.h"
 
 /* strcasecmp is not part of C proper, so */
 static int strcasecmp_local(const char *a, const char *b)

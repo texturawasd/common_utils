@@ -3,7 +3,8 @@
 #ifndef TEXTURAWASD_ARG_H
 #define TEXTURAWASD_ARG_H
 
-#include "src/args.c"
+#include <stdbool.h>
+#include "simple_strings.h"
 
 /*
  * Returns true if the named argument is present in any form:
@@ -46,3 +47,8 @@ str get_arg_value(const char *arg, int argc, char **argv);
 bool config_arg_is_val(const char *key, const char *val, int argc, char **argv);
 
 #endif /* TEXTURAWASD_ARG */
+
+/* Implementation */
+#ifdef ARGS_IMPLEMENTATION
+#include "src/args.c"
+#endif

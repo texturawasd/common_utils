@@ -2,11 +2,11 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include "../simple_strings.h"
 #include <stdio.h>
 #include <sys/stat.h>
 #include <string.h>
-//#include "path_utils.c"
+
+#include "../file_utils.h"
 
 /* Check if a file exists at the given path */
 bool file_exists(const char *path)

@@ -37,13 +37,20 @@ const char *str_find(const str *s, const char *substr);
 str str_quoted_substring(const char *src);
 str str_join(const char *sep, const char **strs, size_t count);
 str str_repeat(const char *src, int n);
+str str_replace(const char *src, const char *old, const char *new_str);
+str str_remove_prefix(const char *src, const char *prefix);
+str str_remove_suffix(const char *src, const char *suffix);
+str str_replace(const char *src, const char *old, const char *new_str);
+str str_remove_prefix(const char *src, const char *prefix);
+str str_remove_suffix(const char *src, const char *suffix);
 
+#define to_cstr(s) cstr(s) /* alias for cstr() */
 #define NULL_STRING str_create("")
-
 
 #endif /* _SIMPLE_STRINGS_H */
 
-/* implementation */
-#ifndef _SIMPLE_STRINGS_IMPL
-#include "src/string_utils.c"
+/* Implementation */
+#ifdef SIMPLE_STRINGS_IMPLEMENTATION
+#include "src/strings.c"
 #endif
+

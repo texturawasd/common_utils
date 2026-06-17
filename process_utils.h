@@ -3,7 +3,8 @@
 #ifndef TEXTURAWASD_PROCESS_UTILS
 #define TEXTURAWASD_PROCESS_UTILS
 
-#include "src/process_utils.c"
+#include <sys/types.h>
+#include <stdbool.h>
 
 /* old function that just runs a thing, not saving the output */
 int run(const char *cmd);
@@ -21,3 +22,8 @@ bool is_process_running(pid_t pid);
 pid_t pidof(const char *name);
 
 #endif /* TEXTURAWASD_PROCESS_UTILS */
+
+/* Implementation */
+#ifdef PROCESS_UTILS_IMPLEMENTATION
+#include "src/process_utils.c"
+#endif

@@ -6,7 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include "../simple_strings.h"
+
+#include "../path_utils.h"
 
 /* expand `~` to home directory of the user */
 str expand_home(const char *path)

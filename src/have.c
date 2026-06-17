@@ -7,6 +7,8 @@
 #include <limits.h>
 #include <stdbool.h>
 
+#include "../have.h"
+
 
 /*
  * HAVE -- returns 1 if the command is found in PATH and executable,

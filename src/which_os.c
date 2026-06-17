@@ -1,7 +1,12 @@
 /* compat: pure C */
 
 #include "../have.h"
-
+#include <stdio.h>
+#include "../which_os.h"
+#include <string.h>
+#if !defined(_WIN32) || defined(_WIN64)
+#include <unistd.h>
+#endif
 /*
  * WHICH_OS -- try my best guess to see which OS i'm running on.
  */

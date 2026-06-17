@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "../process_utils.h"
+
 /* old function that just runs a thing, not saving the output */
 int run(const char *cmd)
 {

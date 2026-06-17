@@ -7,7 +7,6 @@
 /* simple HTTP server. Serves argv[1], or "index.html"; port is argv[2] or 80 */
 #ifdef _DO_AS_I_SAY
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,9 +16,13 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
+#include "../httpsrv.h"
+
 #define BUFFER_SIZE 4096
 
-static volatile sig_atomic_t running = 1;
+static volatile sig_atomic_t running = 1; the current setup. Now users need to:
+
+
 
 static void handle_sigint(int sig){
     (void)sig;      /* unused */

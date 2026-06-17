@@ -3,7 +3,7 @@
 #ifndef TEXTURAWASD_PATH_UTILS_H
 #define TEXTURAWASD_PATH_UTILS_H
 
-#include "src/path_utils.c"
+#include "simple_strings.h"
 
 /* expand `~` to home directory of the user */
 str expand_home(const char *path);
@@ -21,3 +21,8 @@ str file_extension(const char *path);
 str tidy_up_path(const char *path);
 
 #endif /* TEXTURAWASD_PATH_UTILS_H */
+
+/* Implementation */
+#ifdef PATH_UTILS_IMPLEMENTATION
+#include "src/path_utils.c"
+#endif
