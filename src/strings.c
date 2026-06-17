@@ -423,3 +423,204 @@ str str_remove_suffix(const char *src, const char *suffix)
 
     return str_create(src);
 }
+
+/* Check if two strings are equal. */
+bool str_eq(const str *a, const str *b)
+{
+    if (!a || !b) {
+        return a == b;
+    }
+
+    if (a->len != b->len) {
+        return false;
+    }
+
+    return memcmp(a->data, b->data, a->len) == 0;
+}
+
+/* Compare two strings. Returns <0, 0, or >0 like strcmp. */
+int str_cmp(const str *a, const str *b)
+{
+    if (!a || !b) {
+        if (a == b) return 0;
+        return a ? 1 : -1;
+    }
+
+    size_t min_len = a->len < b->len ? a->len : b->len;
+    int cmp = memcmp(a->data, b->data, min_len);
+
+    if (cmp != 0) {
+        return cmp;
+    }
+
+    if (a->len == b->len) {
+        return 0;
+    }
+
+    return a->len < b->len ? -1 : 1;
+}
+
+/* Clear the string contents without freeing memory. */
+void str_clear(str *s)
+{
+    if (s && s->data) {
+        s->data[0] = '\0';
+        s->len = 0;
+    }
+}
+
+/* Reserve capacity for the string. */
+void str_reserve(str *s, size_t cap)
+{
+    if (!s || !s->data || cap <= s->cap) {
+        return;
+    }
+
+    char *new_data = (char *)realloc(s->data, cap);
+    if (new_data) {
+        s->data = new_data;
+        s->cap = cap;
+    }
+}
+
+/* Extract a substring. */
+str str_substr(const str *s, size_t start, size_t len)
+{
+    str result = {0};
+
+    if (!s || !s->data || start >= s->len) {
+        return str_create("");
+    }
+
+    if (start + len > s->len) {
+        len = s->len - start;
+    }
+
+    result.cap = len + 1;
+    result.data = (char *)malloc(result.cap);
+    if (result.data) {
+        memcpy(result.data, s->data + start, len);
+        result.data[len] = '\0';
+        result.len = len;
+    }
+
+    return result;
+}
+
+/* Insert a substring at position. Returns str* for chaining. */
+str *str_insert(str *s, size_t pos, const char *substr)
+{
+    if (!s || !s->data || !substr) {
+        return s;
+    }
+
+    if (pos > s->len) {
+        pos = s->len;
+    }
+
+    size_t substr_len = strlen(substr);
+    if (substr_len == 0) {
+        return s;
+    }
+
+    str_grow(s, substr_len);
+
+    memmove(s->data + pos + substr_len, s->data + pos, s->len - pos + 1);
+    memcpy(s->data + pos, substr, substr_len);
+    s->len += substr_len;
+
+    return s;
+}
+
+/* Erase characters from position. Returns str* for chaining. */
+str *str_erase(str *s, size_t pos, size_t len)
+{
+    if (!s || !s->data || pos >= s->len || len == 0) {
+        return s;
+    }
+
+    if (pos + len > s->len) {
+        len = s->len - pos;
+    }
+
+    memmove(s->data + pos, s->data + pos + len, s->len - pos - len + 1);
+    s->len -= len;
+    s->data[s->len] = '\0';
+
+    return s;
+}
+
+/* Clone a string. */
+str str_clone(const str *s)
+{
+    if (!s || !s->data) {
+        return str_create("");
+    }
+
+    return str_create(s->data);
+}
+
+/* Split a string by delimiter. Returns array of strings, count in out_count. */
+str *str_split(const str *s, const char *delim, size_t *out_count)
+{
+    if (!s || !s->data || !delim || !out_count) {
+        if (out_count) *out_count = 0;
+        return NULL;
+    }
+
+    size_t delim_len = strlen(delim);
+    if (delim_len == 0) {
+        if (out_count) *out_count = 0;
+        return NULL;
+    }
+
+    /* First pass: count splits */
+    size_t count = 1;
+    const char *ptr = s->data;
+    while ((ptr = strstr(ptr, delim))) {
+        count++;
+        ptr += delim_len;
+    }
+
+    /* Allocate result array */
+    str *result = (str *)malloc(count * sizeof(str));
+    if (!result) {
+        *out_count = 0;
+        return NULL;
+    }
+
+    /* Second pass: split */
+    size_t idx = 0;
+    ptr = s->data;
+    const char *start = s->data;
+    const char *match;
+
+    while ((match = strstr(ptr, delim))) {
+        size_t part_len = match - start;
+        char *part = (char *)malloc(part_len + 1);
+        if (part) {
+            memcpy(part, start, part_len);
+            part[part_len] = '\0';
+            result[idx].data = part;
+            result[idx].len = part_len;
+            result[idx].cap = part_len + 1;
+        }
+        idx++;
+        ptr = match + delim_len;
+        start = ptr;
+    }
+
+    /* Last part */
+    size_t part_len = s->len - (start - s->data);
+    char *part = (char *)malloc(part_len + 1);
+    if (part) {
+        memcpy(part, start, part_len);
+        part[part_len] = '\0';
+        result[idx].data = part;
+        result[idx].len = part_len;
+        result[idx].cap = part_len + 1;
+    }
+
+    *out_count = count;
+    return result;
+}
