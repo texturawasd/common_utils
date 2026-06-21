@@ -1,11 +1,9 @@
 /* compat: for Windows only (Winsock2) */
 
-#ifndef _DO_AS_I_SAY
-#error THIS SERVER IS NOT UP TO STANDARDS, DO NOT USE IT. It is an example server.
-#endif
+
 
 /* simple HTTP server. Serves argv[1], or "index.html"; port is argv[2] or 80 */
-#ifdef _DO_AS_I_SAY
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -152,4 +150,3 @@ int http_server(const char *file_to_serve_path, int port)
 
     return EXIT_SUCCESS; /* fixme */
 }
-#endif
