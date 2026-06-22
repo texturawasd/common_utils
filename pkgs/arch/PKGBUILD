@@ -3,7 +3,7 @@ pkgver=1.0
 pkgrel=1
 pkgdesc="Common C utilities library and optional HTTP server"
 arch=('x86_64')
-license=('MIT')
+license=('Unlicense')
 
 source=("$pkgname-$pkgver.tar.gz")
 sha256sums=('SKIP')
