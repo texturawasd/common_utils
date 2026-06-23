@@ -25,7 +25,7 @@ str expand_home(const char *path)
     size_t hlen = strlen(home);
     size_t plen = strlen(path);
 
-    char *buf = malloc(hlen + plen); /* remove '~', add '\0' */
+    char *buf = (char *)malloc(hlen + plen); /* remove '~', add '\0' */
 
     if (!buf) { return NULL_STRING; }
 
@@ -55,7 +55,7 @@ str path_join(const char *a, const char *b)
     size_t extra = (!a_has_slash && !b_has_slash) ? 1 : 0;
     size_t skip  = (a_has_slash && b_has_slash) ? 1 : 0;
 
-    char *buf = malloc(alen + blen + extra - skip + 1);
+    char *buf = (char *)malloc(alen + blen + extra - skip + 1);
     if (!buf) { return NULL_STRING; }
 
     memcpy(buf, a, alen);
@@ -114,7 +114,7 @@ str tidy_up_path(const char *path)
     size_t len = strlen(path);
 
     /* worst case: output <= input + '\0' */
-    char *buf = malloc(len + 1);
+    char *buf = (char *)malloc(len + 1);
 
     if (!buf) { return NULL_STRING; }
 

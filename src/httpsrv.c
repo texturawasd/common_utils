@@ -108,7 +108,7 @@ int http_server(const char *file_to_serve_path, int port)
         long len = ftell(f);
         rewind(f);
 
-        char *body = malloc(len);
+        char *body = (char *)malloc(len);
         fread(body, 1, len, f);
         fclose(f);
 

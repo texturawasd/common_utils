@@ -103,7 +103,7 @@ static char *shell_single_quote(const char *s)
         }
     }
 
-    char *out = malloc(len + 1);
+    char *out = (char *)malloc(len + 1);
     char *q = out;
 
     *q++ = '\'';
@@ -139,7 +139,7 @@ static char *examine_command_and_insert_elevator(const char *command)
             strlen(" sh -c ") +
             strlen(quoted);
 
-        char *out = malloc(len + 1);
+        char *out = (char *)malloc(len + 1);
 
         sprintf(out, "%s sh -c %s", elevator, quoted);
 
@@ -157,7 +157,7 @@ static char *examine_command_and_insert_elevator(const char *command)
      */
     size_t cap = cmdlen * (elen + 2) + cmdlen + 64;
 
-    char *out = malloc(cap);
+    char *out = (char *)malloc(cap);
     size_t used = 0;
 
     bool in_single = false;
