@@ -3,8 +3,8 @@
 #ifndef TEXTURAWASD_ARG_H
 #define TEXTURAWASD_ARG_H
 
-#include <stdbool.h>
 #include "simple_strings.h"
+#include <stdbool.h>
 
 /*
  * Returns true if the named argument is present in any form:

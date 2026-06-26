@@ -1,15 +1,14 @@
 #ifndef _SIMPLE_STRINGS_H
 #define _SIMPLE_STRINGS_H
 
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 /*
  * Strings, but they feel natural, but they're a string.
  * rule of thumb: `String str; str.data` is the same as `char *str; str` in normal C.
  * that's the idiomatic way to use it as a normal C string.
  */
-
 
 typedef struct String {
     char *data;
@@ -59,4 +58,3 @@ str *str_split(const str *s, const char *delim, size_t *out_count);
 #ifdef SIMPLE_STRINGS_IMPLEMENTATION
 #include "src/strings.c"
 #endif
-

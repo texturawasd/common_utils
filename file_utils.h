@@ -1,9 +1,9 @@
 #ifndef TEXTURAWASD_FILE_UTILS_H
 #define TEXTURAWASD_FILE_UTILS_H
 
+#include "simple_strings.h"
 #include <stdbool.h>
 #include <stdlib.h>
-#include "simple_strings.h"
 
 /* Check if a file exists at the given path */
 bool file_exists(const char *path);

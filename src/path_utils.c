@@ -1,7 +1,7 @@
 /* compat: for unix-like systems only */
 
-#include <linux/limits.h>
 #include <limits.h>
+#include <linux/limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,9 +10,10 @@
 #include "../path_utils.h"
 
 /* expand `~` to home directory of the user */
-str expand_home(const char *path)
-{
-    if (!path) { return NULL_STRING; }
+str expand_home(const char *path) {
+    if (!path) {
+        return NULL_STRING;
+    }
 
     if (path[0] != '~') {
         return str_create(path);
@@ -20,14 +21,18 @@ str expand_home(const char *path)
 
     const char *home = getenv("HOME");
 
-    if (!home) { return NULL_STRING; }
+    if (!home) {
+        return NULL_STRING;
+    }
 
     size_t hlen = strlen(home);
     size_t plen = strlen(path);
 
     char *buf = (char *)malloc(hlen + plen); /* remove '~', add '\0' */
 
-    if (!buf) { return NULL_STRING; }
+    if (!buf) {
+        return NULL_STRING;
+    }
 
     memcpy(buf, home, hlen);
 
@@ -42,9 +47,10 @@ str expand_home(const char *path)
 }
 
 /* join paths */
-str path_join(const char *a, const char *b)
-{
-    if (!a || !b) { return NULL_STRING; }
+str path_join(const char *a, const char *b) {
+    if (!a || !b) {
+        return NULL_STRING;
+    }
 
     size_t alen = strlen(a);
     size_t blen = strlen(b);
@@ -53,10 +59,12 @@ str path_join(const char *a, const char *b)
     int b_has_slash = (blen > 0 && b[0] == '/');
 
     size_t extra = (!a_has_slash && !b_has_slash) ? 1 : 0;
-    size_t skip  = (a_has_slash && b_has_slash) ? 1 : 0;
+    size_t skip = (a_has_slash && b_has_slash) ? 1 : 0;
 
     char *buf = (char *)malloc(alen + blen + extra - skip + 1);
-    if (!buf) { return NULL_STRING; }
+    if (!buf) {
+        return NULL_STRING;
+    }
 
     memcpy(buf, a, alen);
 
@@ -78,22 +86,25 @@ str path_join(const char *a, const char *b)
 }
 
 /* actual real path */
-str canonical_path(const char *path)
-{
-    if (!path) { return NULL_STRING; }
-
+str canonical_path(const char *path) {
+    if (!path) {
+        return NULL_STRING;
+    }
 
     char resolved[PATH_MAX];
 
-    if (!realpath(path, resolved)) { return NULL_STRING; }
+    if (!realpath(path, resolved)) {
+        return NULL_STRING;
+    }
 
     return str_create(resolved);
 }
 
 /* get the file's extension. not for files with no extension or hidden */
-str file_extension(const char *path)
-{
-    if (!path) { return NULL_STRING; }
+str file_extension(const char *path) {
+    if (!path) {
+        return NULL_STRING;
+    }
 
     const char *filename = strrchr(path, '/');
     filename = filename ? filename + 1 : path;
@@ -101,22 +112,27 @@ str file_extension(const char *path)
     const char *dot = strrchr(filename, '.');
 
     /* no extension or hidden file like ".gitignore" */
-    if (!dot || dot == filename) { return NULL_STRING; }
+    if (!dot || dot == filename) {
+        return NULL_STRING;
+    }
 
     return str_create(dot + 1);
 }
 
 /* clean up the path (remove duplicated `/`, only leave the final `/` if the last item is actually a directory)*/
-str tidy_up_path(const char *path)
-{
-    if (!path) { return NULL_STRING; }
+str tidy_up_path(const char *path) {
+    if (!path) {
+        return NULL_STRING;
+    }
 
     size_t len = strlen(path);
 
     /* worst case: output <= input + '\0' */
     char *buf = (char *)malloc(len + 1);
 
-    if (!buf) { return NULL_STRING; }
+    if (!buf) {
+        return NULL_STRING;
+    }
 
     size_t i = 0;
     size_t j = 0;
@@ -127,8 +143,9 @@ str tidy_up_path(const char *path)
         buf[j++] = path[i];
 
         if (path[i] == '/') {
-            while (i + 1 < len && path[i + 1] == '/')
+            while (i + 1 < len && path[i + 1] == '/') {
                 i++;
+            }
         }
 
         i++;

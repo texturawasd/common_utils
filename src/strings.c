@@ -3,10 +3,10 @@
 #define _SIMPLE_STRINGS_IMPL
 /* texturawasd - June 2026 */
 
-#include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "../simple_strings.h"
 
@@ -15,8 +15,7 @@
  */
 
 /* Create a new String from a C string. */
-str str_create(const char *src)
-{
+str str_create(const char *src) {
     str s = {0};
     if (src) {
         size_t len = strlen(src);
@@ -39,8 +38,7 @@ str str_create(const char *src)
 }
 
 /* Create a new String with initial capacity. */
-str str_with_cap(size_t cap)
-{
+str str_with_cap(size_t cap) {
     str s = {0};
     s.cap = cap > 0 ? cap : 1;
     s.data = (char *)malloc(s.cap);
@@ -52,8 +50,7 @@ str str_with_cap(size_t cap)
 }
 
 /* Free the String's allocated memory. */
-void str_destroy(str *s)
-{
+void str_destroy(str *s) {
     if (s && s->data) {
         free(s->data);
         s->data = NULL;
@@ -63,25 +60,24 @@ void str_destroy(str *s)
 }
 
 /* Convert String to const char * (explicit conversion). */
-const char *cstr(const str *s)
-{
+const char *cstr(const str *s) {
     return (s && s->data) ? s->data : "";
 }
 
 #define to_cstr(s) cstr(s) /* alias for cstr() */
-
 
 /*
  * Growing and Capacity
  */
 
 /* Grow the String's capacity. */
-static void str_grow(str *s, size_t additional)
-{
-    if (!s || !s->data) return;
+static void str_grow(str *s, size_t additional) {
+    if (!s || !s->data)
+        return;
 
     size_t needed = s->len + additional + 1;
-    if (needed <= s->cap) return;
+    if (needed <= s->cap)
+        return;
 
     size_t new_cap = s->cap * 2;
     while (new_cap < needed) {
@@ -95,14 +91,12 @@ static void str_grow(str *s, size_t additional)
     }
 }
 
-
 /*
  * String Modification
-*/
+ */
 
 /* Append a C string to the String. Returns String* for chaining. */
-str *str_append(str *s, const char *suffix)
-{
+str *str_append(str *s, const char *suffix) {
     if (!s || !s->data || !suffix) {
         return s;
     }
@@ -121,8 +115,7 @@ str *str_append(str *s, const char *suffix)
 }
 
 /* Prepend a C string to the String. Returns String* for chaining. */
-str *str_prepend(str *s, const char *prefix)
-{
+str *str_prepend(str *s, const char *prefix) {
     if (!s || !s->data || !prefix) {
         return s;
     }
@@ -141,8 +134,7 @@ str *str_prepend(str *s, const char *prefix)
 }
 
 /* Trim leading and trailing whitespace. Returns String*. */
-str *str_trim(str *s)
-{
+str *str_trim(str *s) {
     if (!s || !s->data) {
         return s;
     }
@@ -169,8 +161,7 @@ str *str_trim(str *s)
 }
 
 /* Trim leading whitespace. Returns String*. */
-str *str_ltrim(str *s)
-{
+str *str_ltrim(str *s) {
     if (!s || !s->data) {
         return s;
     }
@@ -190,8 +181,7 @@ str *str_ltrim(str *s)
 }
 
 /* Trim trailing whitespace. Returns String*. */
-str *str_rtrim(str *s)
-{
+str *str_rtrim(str *s) {
     if (!s || !s->data) {
         return s;
     }
@@ -205,8 +195,7 @@ str *str_rtrim(str *s)
 }
 
 /* Convert string to uppercase. Returns String*. */
-str *to_upper(str *s)
-{
+str *to_upper(str *s) {
     if (!s || !s->data) {
         return s;
     }
@@ -219,8 +208,7 @@ str *to_upper(str *s)
 }
 
 /* Convert string to lowercase. Returns String*. */
-str *to_lower(str *s)
-{
+str *to_lower(str *s) {
     if (!s || !s->data) {
         return s;
     }
@@ -232,14 +220,12 @@ str *to_lower(str *s)
     return s;
 }
 
-
 /*
  * String Queries
  */
 
 /* Check if string ends with suffix. */
-bool str_ends_with(const str *s, const char *suffix)
-{
+bool str_ends_with(const str *s, const char *suffix) {
     if (!s || !suffix) {
         return false;
     }
@@ -253,8 +239,7 @@ bool str_ends_with(const str *s, const char *suffix)
 }
 
 /* Check if string starts with prefix. */
-bool str_starts_with(const str *s, const char *prefix)
-{
+bool str_starts_with(const str *s, const char *prefix) {
     if (!s || !prefix) {
         return false;
     }
@@ -268,8 +253,7 @@ bool str_starts_with(const str *s, const char *prefix)
 }
 
 /* Find the first occurrence of substring. Returns pointer or NULL. */
-const char *str_find(const str *s, const char *substr)
-{
+const char *str_find(const str *s, const char *substr) {
     if (!s || !substr) {
         return NULL;
     }
@@ -278,8 +262,7 @@ const char *str_find(const str *s, const char *substr)
 }
 
 /* Get substring in quotes. Extracts text between `"..."`. */
-str str_quoted_substring(const char *src)
-{
+str str_quoted_substring(const char *src) {
     str s = {0};
     if (!src) {
         return s;
@@ -311,14 +294,12 @@ str str_quoted_substring(const char *src)
     return s;
 }
 
-
 /*
  * Utility Functions
  */
 
 /* Join an array of C strings with separator. */
-str str_join(const char *sep, const char **strs, size_t count)
-{
+str str_join(const char *sep, const char **strs, size_t count) {
     str s = str_create("");
     if (!sep || !strs) {
         return s;
@@ -335,8 +316,7 @@ str str_join(const char *sep, const char **strs, size_t count)
 }
 
 /* Repeat a string n times. */
-str str_repeat(const char *src, int n)
-{
+str str_repeat(const char *src, int n) {
     str s = str_create("");
     if (!src || n <= 0) {
         return s;
@@ -350,8 +330,7 @@ str str_repeat(const char *src, int n)
 }
 
 /* Replace all occurrences of old with new. */
-str str_replace(const char *src, const char *old, const char *new_str)
-{
+str str_replace(const char *src, const char *old, const char *new_str) {
     str s = str_create("");
     if (!src || !old || !new_str) {
         return str_create(src);
@@ -382,13 +361,12 @@ str str_replace(const char *src, const char *old, const char *new_str)
         ptr = match + old_len;
     }
 
-    str_append(&s, ptr);  /* append remainder */
+    str_append(&s, ptr); /* append remainder */
     return s;
 }
 
 /* Remove prefix if present. */
-str str_remove_prefix(const char *src, const char *prefix)
-{
+str str_remove_prefix(const char *src, const char *prefix) {
     if (!src || !prefix) {
         return str_create(src);
     }
@@ -404,8 +382,7 @@ str str_remove_prefix(const char *src, const char *prefix)
 }
 
 /* Remove suffix if present. */
-str str_remove_suffix(const char *src, const char *suffix)
-{
+str str_remove_suffix(const char *src, const char *suffix) {
     if (!src || !suffix) {
         return str_create(src);
     }
@@ -425,8 +402,7 @@ str str_remove_suffix(const char *src, const char *suffix)
 }
 
 /* Check if two strings are equal. */
-bool str_eq(const str *a, const str *b)
-{
+bool str_eq(const str *a, const str *b) {
     if (!a || !b) {
         return a == b;
     }
@@ -439,10 +415,10 @@ bool str_eq(const str *a, const str *b)
 }
 
 /* Compare two strings. Returns <0, 0, or >0 like strcmp. */
-int str_cmp(const str *a, const str *b)
-{
+int str_cmp(const str *a, const str *b) {
     if (!a || !b) {
-        if (a == b) return 0;
+        if (a == b)
+            return 0;
         return a ? 1 : -1;
     }
 
@@ -461,8 +437,7 @@ int str_cmp(const str *a, const str *b)
 }
 
 /* Clear the string contents without freeing memory. */
-void str_clear(str *s)
-{
+void str_clear(str *s) {
     if (s && s->data) {
         s->data[0] = '\0';
         s->len = 0;
@@ -470,8 +445,7 @@ void str_clear(str *s)
 }
 
 /* Reserve capacity for the string. */
-void str_reserve(str *s, size_t cap)
-{
+void str_reserve(str *s, size_t cap) {
     if (!s || !s->data || cap <= s->cap) {
         return;
     }
@@ -484,8 +458,7 @@ void str_reserve(str *s, size_t cap)
 }
 
 /* Extract a substring. */
-str str_substr(const str *s, size_t start, size_t len)
-{
+str str_substr(const str *s, size_t start, size_t len) {
     str result = {0};
 
     if (!s || !s->data || start >= s->len) {
@@ -508,8 +481,7 @@ str str_substr(const str *s, size_t start, size_t len)
 }
 
 /* Insert a substring at position. Returns str* for chaining. */
-str *str_insert(str *s, size_t pos, const char *substr)
-{
+str *str_insert(str *s, size_t pos, const char *substr) {
     if (!s || !s->data || !substr) {
         return s;
     }
@@ -533,8 +505,7 @@ str *str_insert(str *s, size_t pos, const char *substr)
 }
 
 /* Erase characters from position. Returns str* for chaining. */
-str *str_erase(str *s, size_t pos, size_t len)
-{
+str *str_erase(str *s, size_t pos, size_t len) {
     if (!s || !s->data || pos >= s->len || len == 0) {
         return s;
     }
@@ -551,8 +522,7 @@ str *str_erase(str *s, size_t pos, size_t len)
 }
 
 /* Clone a string. */
-str str_clone(const str *s)
-{
+str str_clone(const str *s) {
     if (!s || !s->data) {
         return str_create("");
     }
@@ -561,16 +531,17 @@ str str_clone(const str *s)
 }
 
 /* Split a string by delimiter. Returns array of strings, count in out_count. */
-str *str_split(const str *s, const char *delim, size_t *out_count)
-{
+str *str_split(const str *s, const char *delim, size_t *out_count) {
     if (!s || !s->data || !delim || !out_count) {
-        if (out_count) *out_count = 0;
+        if (out_count)
+            *out_count = 0;
         return NULL;
     }
 
     size_t delim_len = strlen(delim);
     if (delim_len == 0) {
-        if (out_count) *out_count = 0;
+        if (out_count)
+            *out_count = 0;
         return NULL;
     }
 

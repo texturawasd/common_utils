@@ -4,7 +4,7 @@
 #define ELEVATE_H
 
 /* determine which privilege elevator program, sudo or doas, is available. checks for sudo first, then doas */
-const char* determine_elevator();
+const char *determine_elevator();
 
 /* elevate a commmand by inserting sudo or doas where needed
  example:

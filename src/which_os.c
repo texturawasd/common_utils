@@ -1,8 +1,8 @@
 /* compat: pure C */
 
+#include "../which_os.h"
 #include "../have.h"
 #include <stdio.h>
-#include "../which_os.h"
 #include <string.h>
 #if !defined(_WIN32) || defined(_WIN64)
 #include <unistd.h>
@@ -11,18 +11,17 @@
  * WHICH_OS -- try my best guess to see which OS i'm running on.
  */
 
- const char *os;
+const char *os;
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
 #include <winternl.h>
 
-const char *try_to_determine_windows_version(void)
-{
+const char *try_to_determine_windows_version(void) {
     RTL_OSVERSIONINFOW ver = {0};
     ver.dwOSVersionInfoSize = sizeof(ver);
 
-    typedef LONG (WINAPI *RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
+    typedef LONG(WINAPI * RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
 
     HMODULE hMod = GetModuleHandleW(L"ntdll.dll");
     if (!hMod)
@@ -39,9 +38,12 @@ const char *try_to_determine_windows_version(void)
 
     if (ver.dwMajorVersion == 6) {
         switch (ver.dwMinorVersion) {
-        case 1: return "windows7";
-        case 2: return "windows8";
-        case 3: return "windows8.1";
+        case 1:
+            return "windows7";
+        case 2:
+            return "windows8";
+        case 3:
+            return "windows8.1";
         }
     }
 
@@ -57,7 +59,6 @@ const char *try_to_determine_windows_version(void)
     return "windows";
 }
 #elif defined(__linux__)
-
 
 // remember to free the returned string after use
 const char *try_to_determine_linux_distro(const bool like) {

@@ -1,17 +1,16 @@
 /* compat: for unix-like systems only (note: for now only tested on linux) */
 
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
 #include "../process_utils.h"
 
 /* old function that just runs a thing, not saving the output */
-int run(const char *cmd)
-{
+int run(const char *cmd) {
     FILE *pipe = popen(cmd, "r");
     if (!pipe) {
         return -1;
@@ -25,8 +24,7 @@ int run(const char *cmd)
 }
 
 /* note: free it, will you? */
-char *capture_output(const char *cmd)
-{
+char *capture_output(const char *cmd) {
     char *output = NULL;
     size_t size = 0;
     FILE *pipe = popen(cmd, "r");
@@ -52,8 +50,7 @@ char *capture_output(const char *cmd)
 }
 
 /* runs a thing and explicitly throws out the output*/
-int run_quiet(const char *cmd)
-{
+int run_quiet(const char *cmd) {
     char full_cmd[512];
     snprintf(full_cmd, sizeof(full_cmd), "%s >/dev/null 2>&1", cmd);
     FILE *pipe = popen(full_cmd, "r");
@@ -65,16 +62,14 @@ int run_quiet(const char *cmd)
 }
 
 /* shorthand to check if its running */
-bool is_process_running(pid_t pid)
-{
+bool is_process_running(pid_t pid) {
     char cmd[32];
     snprintf(cmd, sizeof(cmd), "kill -0 %d 2>/dev/null", (int)pid);
     return run_quiet(cmd) == 0;
 }
 
 /* pidof without shelling out */
-pid_t pidof(const char *name)
-{
+pid_t pidof(const char *name) {
     char cmd[256];
     snprintf(cmd, sizeof(cmd), "pgrep -x %s", name);
     char *output = capture_output(cmd);

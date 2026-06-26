@@ -3,8 +3,8 @@
 #ifndef TEXTURAWASD_PROCESS_UTILS
 #define TEXTURAWASD_PROCESS_UTILS
 
-#include <sys/types.h>
 #include <stdbool.h>
+#include <sys/types.h>
 
 /* old function that just runs a thing, not saving the output */
 int run(const char *cmd);

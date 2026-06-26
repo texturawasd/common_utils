@@ -10,16 +10,19 @@
 #include "../have.h"
 
 /* determine which privilege elevator program, sudo or doas, is available. checks for sudo first, then doas */
-const char* determine_elevator() {
-	const char *elevator = "neither_sudo_nor_doas_found.";
-	if (command_exists("sudo")) { elevator = "sudo"; }
-	if (command_exists("doas")) { elevator = "doas"; }
+const char *determine_elevator() {
+    const char *elevator = "neither_sudo_nor_doas_found.";
+    if (command_exists("sudo")) {
+        elevator = "sudo";
+    }
+    if (command_exists("doas")) {
+        elevator = "doas";
+    }
     return elevator;
 }
 
 /* check if the input command is simple enough or not */
-static bool is_simple_command_list(const char *s)
-{
+static bool is_simple_command_list(const char *s) {
     bool in_single = false;
     bool in_double = false;
     bool escaped = false;
@@ -47,8 +50,9 @@ static bool is_simple_command_list(const char *s)
             continue;
         }
 
-        if (in_single || in_double)
+        if (in_single || in_double) {
             continue;
+        }
 
         switch (c) {
 
@@ -80,8 +84,9 @@ static bool is_simple_command_list(const char *s)
             return false;
 
         case '$':
-            if (s[1] == '(' || s[1] == '{')
+            if (s[1] == '(' || s[1] == '{') {
                 return false;
+            }
             break;
         }
     }
@@ -89,10 +94,8 @@ static bool is_simple_command_list(const char *s)
     return !in_single && !in_double;
 }
 
-
 /* just wrap it in sudo sh -c "s" */
-static char *shell_single_quote(const char *s)
-{
+static char *shell_single_quote(const char *s) {
     size_t len = 2; /* opening + closing quote */
 
     for (const char *p = s; *p; p++) {
@@ -127,15 +130,14 @@ static char *shell_single_quote(const char *s)
  this is done because maybe the elevator command has to be inserted more than once,
  because the plain command actually runs multiple commands, separated by shell
  operators such as `&&`, `||`, `;`, possibly `|`, `&`, etc. */
-static char *examine_command_and_insert_elevator(const char *command)
-{
+static char *examine_command_and_insert_elevator(const char *command) {
     const char *elevator = determine_elevator();
 
     if (!is_simple_command_list(command)) {
         char *quoted = shell_single_quote(command);
 
         size_t len =
-            strlen(elevator)  +
+            strlen(elevator) +
             strlen(" sh -c ") +
             strlen(quoted);
 
@@ -260,7 +262,9 @@ const char *elevate_command(const char *command) {
         // y/n, strip newline
         if (confirmation != '\n' && confirmation != EOF) {
             int c;
-            while ((c = getchar()) != '\n' && c != EOF);
+            while ((c = getchar()) != '\n' && c != EOF) {
+                ;
+            }
         }
         if (confirmation != 'Y' && confirmation != 'y') {
             exit(EXIT_FAILURE);
@@ -269,4 +273,3 @@ const char *elevate_command(const char *command) {
 
     return examine_command_and_insert_elevator(command);
 }
-
