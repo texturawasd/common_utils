@@ -8,6 +8,7 @@
 #include <string.h>
 
 #include "../args.h"
+#include "../simple_strings.h"
 
 /* Internal helpers */
 
@@ -136,6 +137,54 @@ str get_arg_value(const char *arg, int argc, char **argv) {
         }
     }
     return NULL_STRING;
+}
+
+/*
+ * Joins argv entries into a single string.
+ *
+ * If skip_argv_0 is true, argv[0] (the executable name) is omitted.
+ *
+ * Examples:
+ *   argv = {"prog", "--foo=bar", "-v"}
+ *
+ *   all_args_to_string(argc, argv, ' ', false)
+ *     -> "prog --foo=bar -v"
+ *
+ *   all_args_to_string(argc, argv, ' ', true)
+ *     -> "--foo=bar -v"
+ */
+str all_args_to_string(int argc, char **argv, char sep, bool skip_argv_0) {
+    str result = str_create("");
+
+    if (argc <= 0 || argv == NULL) {
+        return result;
+    }
+
+    int start = skip_argv_0 ? 1 : 0;
+
+    if (start >= argc) {
+        return result;
+    }
+
+    size_t total = 0;
+    for (int i = start; i < argc; i++) {
+        total += strlen(argv[i]);
+    }
+    total += (size_t)(argc - start - 1);
+
+    str_reserve(&result, total + 1);
+
+    char sep_str[2] = { sep, '\0' };
+
+    for (int i = start; i < argc; i++) {
+        str_append(&result, argv[i]);
+
+        if (i != argc - 1) {
+            str_append(&result, sep_str);
+        }
+    }
+
+    return result;
 }
 
 /*
