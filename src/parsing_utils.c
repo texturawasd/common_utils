@@ -14,8 +14,9 @@ static int strcasecmp_local(const char *a, const char *b) {
         int ca = tolower((unsigned char)*a);
         int cb = tolower((unsigned char)*b);
 
-        if (ca != cb)
+        if (ca != cb) {
             return ca - cb;
+        }
 
         a++;
         b++;

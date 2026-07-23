@@ -174,7 +174,7 @@ str all_args_to_string(int argc, char **argv, char sep, bool skip_argv_0) {
 
     str_reserve(&result, total + 1);
 
-    char sep_str[2] = { sep, '\0' };
+    char sep_str[2] = {sep, '\0'};
 
     for (int i = start; i < argc; i++) {
         str_append(&result, argv[i]);

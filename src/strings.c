@@ -64,20 +64,20 @@ const char *cstr(const str *s) {
     return (s && s->data) ? s->data : "";
 }
 
-#define to_cstr(s) cstr(s) /* alias for cstr() */
-
 /*
  * Growing and Capacity
  */
 
 /* Grow the String's capacity. */
 static void str_grow(str *s, size_t additional) {
-    if (!s || !s->data)
+    if (!s || !s->data) {
         return;
+    }
 
     size_t needed = s->len + additional + 1;
-    if (needed <= s->cap)
+    if (needed <= s->cap) {
         return;
+    }
 
     size_t new_cap = s->cap * 2;
     while (new_cap < needed) {
@@ -417,8 +417,9 @@ bool str_eq(const str *a, const str *b) {
 /* Compare two strings. Returns <0, 0, or >0 like strcmp. */
 int str_cmp(const str *a, const str *b) {
     if (!a || !b) {
-        if (a == b)
+        if (a == b) {
             return 0;
+        }
         return a ? 1 : -1;
     }
 
@@ -533,15 +534,17 @@ str str_clone(const str *s) {
 /* Split a string by delimiter. Returns array of strings, count in out_count. */
 str *str_split(const str *s, const char *delim, size_t *out_count) {
     if (!s || !s->data || !delim || !out_count) {
-        if (out_count)
+        if (out_count) {
             *out_count = 0;
+        }
         return NULL;
     }
 
     size_t delim_len = strlen(delim);
     if (delim_len == 0) {
-        if (out_count)
+        if (out_count) {
             *out_count = 0;
+        }
         return NULL;
     }
 

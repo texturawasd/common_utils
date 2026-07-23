@@ -1,6 +1,6 @@
 /* Implementation of unit conversion helpers (double precision) */
-#include <math.h>
 #include "../unit_utils.h"
+#include <math.h>
 
 #ifndef PI_D
 #ifdef M_PI
@@ -105,4 +105,3 @@ inline double byte_to_kibibyte(double bytes) { return bytes / 1024.0; }
 inline double kibibyte_to_byte(double kib) { return kib * 1024.0; }
 inline double byte_to_kilobyte(double bytes) { return bytes / 1000.0; }
 inline double kilobyte_to_byte(double kb) { return kb * 1000.0; }
-

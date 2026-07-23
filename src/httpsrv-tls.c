@@ -66,7 +66,7 @@ static SSL_CTX *create_ssl_context(void) {
 
     /* Security options: disable compression and prefer server cipher order */
     SSL_CTX_set_options(ctx,
-        SSL_OP_NO_COMPRESSION | SSL_OP_CIPHER_SERVER_PREFERENCE);
+                        SSL_OP_NO_COMPRESSION | SSL_OP_CIPHER_SERVER_PREFERENCE);
 
     return ctx;
 }
@@ -74,8 +74,12 @@ static SSL_CTX *create_ssl_context(void) {
 static int load_cert_and_key(SSL_CTX *ctx) {
     const char *cert_path = getenv("HTTPSRV_CERT");
     const char *key_path = getenv("HTTPSRV_KEY");
-    if (!cert_path) { cert_path = "cert.pem"; }
-    if (!key_path) { key_path = "key.pem"; }
+    if (!cert_path) {
+        cert_path = "cert.pem";
+    }
+    if (!key_path) {
+        key_path = "key.pem";
+    }
 
     if (SSL_CTX_use_certificate_file(ctx, cert_path, SSL_FILETYPE_PEM) <= 0) {
         fprintf(stderr, "failed to load certificate: %s\n", cert_path);
@@ -177,9 +181,9 @@ int https_server(const char *file_to_serve_path)
 #ifndef _ONESHOT_HTTPSRV
             continue;
 #else
-            SSL_CTX_free(ctx);
-            close(server_fd);
-            return EXIT_FAILURE;
+        SSL_CTX_free(ctx);
+        close(server_fd);
+        return EXIT_FAILURE;
 #endif
         }
 
@@ -190,9 +194,9 @@ int https_server(const char *file_to_serve_path)
 #ifndef _ONESHOT_HTTPSRV
             continue;
 #else
-            SSL_CTX_free(ctx);
-            close(server_fd);
-            return EXIT_FAILURE;
+        SSL_CTX_free(ctx);
+        close(server_fd);
+        return EXIT_FAILURE;
 #endif
         }
 
@@ -203,9 +207,9 @@ int https_server(const char *file_to_serve_path)
 #ifndef _ONESHOT_HTTPSRV
             continue;
 #else
-            SSL_CTX_free(ctx);
-            close(server_fd);
-            return EXIT_FAILURE;
+        SSL_CTX_free(ctx);
+        close(server_fd);
+        return EXIT_FAILURE;
 #endif
         }
 
@@ -218,8 +222,8 @@ int https_server(const char *file_to_serve_path)
 #ifndef _ONESHOT_HTTPSRV
             continue;
 #else
-            SSL_CTX_free(ctx);
-            return EXIT_FAILURE;
+        SSL_CTX_free(ctx);
+        return EXIT_FAILURE;
 #endif
         }
 
@@ -230,7 +234,7 @@ int https_server(const char *file_to_serve_path)
 
         while (request_len < sizeof(request) - 1 && !read_complete) {
             int n = SSL_read(ssl, request + request_len,
-                           (int)(sizeof(request) - 1 - request_len));
+                             (int)(sizeof(request) - 1 - request_len));
 
             if (n > 0) {
                 request_len += (size_t)n;
@@ -249,7 +253,7 @@ int https_server(const char *file_to_serve_path)
                     /* Clean close */
                     break;
                 } else if (err == SSL_ERROR_WANT_READ ||
-                          err == SSL_ERROR_WANT_WRITE) {
+                           err == SSL_ERROR_WANT_WRITE) {
                     /* Retry (would block) */
                     continue;
                 } else {
@@ -285,8 +289,8 @@ int https_server(const char *file_to_serve_path)
 #ifndef _ONESHOT_HTTPSRV
             continue;
 #else
-            SSL_CTX_free(ctx);
-            return EXIT_SUCCESS;
+        SSL_CTX_free(ctx);
+        return EXIT_SUCCESS;
 #endif
         }
 
@@ -310,9 +314,9 @@ int https_server(const char *file_to_serve_path)
 #ifndef _ONESHOT_HTTPSRV
             continue;
 #else
-            SSL_CTX_free(ctx);
-            close(server_fd);
-            return EXIT_FAILURE;
+        SSL_CTX_free(ctx);
+        close(server_fd);
+        return EXIT_FAILURE;
 #endif
         }
 
@@ -337,9 +341,9 @@ int https_server(const char *file_to_serve_path)
 #ifndef _ONESHOT_HTTPSRV
             continue;
 #else
-            SSL_CTX_free(ctx);
-            close(server_fd);
-            return EXIT_FAILURE;
+        SSL_CTX_free(ctx);
+        close(server_fd);
+        return EXIT_FAILURE;
 #endif
         }
 
@@ -363,9 +367,9 @@ int https_server(const char *file_to_serve_path)
 #ifndef _ONESHOT_HTTPSRV
             continue;
 #else
-            SSL_CTX_free(ctx);
-            close(server_fd);
-            return EXIT_FAILURE;
+        SSL_CTX_free(ctx);
+        close(server_fd);
+        return EXIT_FAILURE;
 #endif
         }
 
@@ -390,9 +394,9 @@ int https_server(const char *file_to_serve_path)
 #ifndef _ONESHOT_HTTPSRV
             continue;
 #else
-            SSL_CTX_free(ctx);
-            close(server_fd);
-            return EXIT_FAILURE;
+        SSL_CTX_free(ctx);
+        close(server_fd);
+        return EXIT_FAILURE;
 #endif
         }
 
@@ -418,9 +422,9 @@ int https_server(const char *file_to_serve_path)
 #ifndef _ONESHOT_HTTPSRV
             continue;
 #else
-            SSL_CTX_free(ctx);
-            close(server_fd);
-            return EXIT_FAILURE;
+        SSL_CTX_free(ctx);
+        close(server_fd);
+        return EXIT_FAILURE;
 #endif
         }
         fclose(f);
