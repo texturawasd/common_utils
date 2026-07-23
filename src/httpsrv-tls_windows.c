@@ -1,5 +1,7 @@
 /* compat: for Windows only (Winsock2) */
 
+#ifdef _WIN32
+
 /* simple HTTPS server. Serves argv[1], or "index.html"
  *
  * Requires OpenSSL: link with -lssl -lcrypto
@@ -483,3 +485,5 @@ int https_server(const char *file_to_serve_path)
 
     return EXIT_SUCCESS;
 }
+
+#endif

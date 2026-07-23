@@ -1,4 +1,5 @@
 /* compat: for Windows only */
+#ifdef _WIN32
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -88,3 +89,4 @@ const char *which(const char *command) {
 
     return strdup(found);
 }
+#endif

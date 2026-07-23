@@ -1,5 +1,7 @@
 /* compat: for Windows only (Winsock2) */
 
+#ifdef _WIN32
+
 /* simple HTTP server. Serves argv[1], or "index.html"; port is argv[2] or 80 */
 
 #include <signal.h>
@@ -154,3 +156,5 @@ int http_server(const char *file_to_serve_path, int port)
 
     return EXIT_SUCCESS; /* fixme */
 }
+
+#endif

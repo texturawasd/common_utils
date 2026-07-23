@@ -2,6 +2,7 @@
 #define _SIMPLE_STRINGS_H
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdlib.h>
 
 /*
@@ -41,6 +42,9 @@ const char *cstr(const str *s);
 /* Append a C string to the String. Returns String* for chaining. */
 str *str_append(str *s, const char *suffix);
 
+/* Append a String to a String. Returns String. */
+str str_append_str(str *s, str *suffix);
+
 /* Prepend a C string to the String. Returns String* for chaining. */
 str *str_prepend(str *s, const char *prefix);
 
@@ -52,6 +56,18 @@ str *str_ltrim(str *s);
 
 /* Trim trailing whitespace. Returns String*. */
 str *str_rtrim(str *s);
+
+/* Remove one trailing line ending (\n, \r, or \r\n). Returns String*. */
+str *str_chomp(str *s);
+
+/* Remove all trailing line endings. Returns String*. */
+str *str_chomp_all(str *s);
+
+/* Chop off a character from s. */
+str *str_chop(str *s);
+
+/* Chop off multiple characters from s. */
+str *str_chop_n(str *s, size_t n);
 
 /* Convert string to uppercase. Returns String*. */
 str *to_upper(str *s);
@@ -81,6 +97,9 @@ str str_quoted_substring(const char *src);
 
 /* Join an array of C strings with separator. */
 str str_join(const char *sep, const char **strs, size_t count);
+
+/* Join an array of Strings with separator */
+str str_join_strs(const char *sep, const char strings[], size_t count);
 
 /* Repeat a string n times. */
 str str_repeat(const char *src, int n);

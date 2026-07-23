@@ -114,6 +114,14 @@ str *str_append(str *s, const char *suffix) {
     return s;
 }
 
+/* Append a String to the String. Returns String. */
+str str_append_str(str *s, str *suffix) {
+    if (!s || !s->data || !suffix) {
+        return *s;
+    }
+    return *str_append(s, suffix->data);
+}
+
 /* Prepend a C string to the String. Returns String* for chaining. */
 str *str_prepend(str *s, const char *prefix) {
     if (!s || !s->data || !prefix) {
@@ -191,6 +199,60 @@ str *str_rtrim(str *s) {
     }
     s->data[s->len] = '\0';
 
+    return s;
+}
+
+str *str_chomp(str *s) {
+    if (!s || s->len == 0) {
+        return s;
+    }
+
+    if (s->len >= 2 &&
+        s->data[s->len - 2] == '\r' &&
+        s->data[s->len - 1] == '\n') {
+        s->len -= 2;
+    } else if (s->data[s->len - 1] == '\n' ||
+               s->data[s->len - 1] == '\r') {
+        s->len--;
+    }
+
+    s->data[s->len] = '\0';
+    return s;
+}
+
+str *str_chomp_all(str *s) {
+    if (!s) {
+        return s;
+    }
+
+    while (s->len > 0 &&
+           (s->data[s->len - 1] == '\n' ||
+            s->data[s->len - 1] == '\r')) {
+        s->len--;
+    }
+
+    s->data[s->len] = '\0';
+    return s;
+}
+
+str *str_chop(str *s) {
+    if (!s || s->len == 0) {
+        return s;
+    }
+    s->len--;
+    s->data[s->len] = '\0';
+    return s;
+}
+
+str *str_chop_n(str *s, size_t n) {
+    if (!s) {
+        return s;
+    }
+    if (n > s->len) {
+        n = s->len;
+    }
+    s->len -= n;
+    s->data[s->len] = '\0';
     return s;
 }
 
@@ -310,6 +372,22 @@ str str_join(const char *sep, const char **strs, size_t count) {
             str_append(&s, sep);
         }
         str_append(&s, strs[i]);
+    }
+
+    return s;
+}
+
+str str_join_strs(const char *sep, const char strs[], size_t count) {
+    str s = str_create("");
+    if (!sep || !strs) {
+        return s;
+    }
+
+    for (size_t i = 0; i < count; i++) {
+        if (i > 0) {
+            str_append(&s, sep);
+        }
+        str_append(&s, &strs[i]);
     }
 
     return s;
