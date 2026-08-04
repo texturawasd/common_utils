@@ -48,4 +48,7 @@ int process_exec(const char *path,
                  char **stderr_data,
                  int *exit_status_out);
 
+void print_command_output(const char *stdout_data, const char *stderr_data);
+
+int run_command_via_exec(const char *command, char **stdout_data, char **stderr_data, int *exit_status_out);
 #endif /* TEXTURAWASD_PROCESS_UTILS */

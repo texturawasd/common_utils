@@ -377,3 +377,17 @@ int process_exec(const char *path,
     }
     return 0;
 }
+
+void print_command_output(const char *stdout_data, const char *stderr_data) {
+    if (stdout_data && *stdout_data) {
+        fputs(stdout_data, stdout);
+    }
+    if (stderr_data && *stderr_data) {
+        fputs(stderr_data, stderr);
+    }
+}
+
+int run_command_via_exec(const char *command, char **stdout_data, char **stderr_data, int *exit_status_out) {
+    char *const argv[] = {"/bin/sh", "-c", (char *)command, NULL};
+    return process_exec("/bin/sh", argv, NULL, NULL, true, true, stdout_data, stderr_data, exit_status_out);
+}
