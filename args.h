@@ -49,8 +49,3 @@ bool config_arg_is_val(const char *key, const char *val, int argc, char **argv);
 str all_args_to_string(int argc, char **argv, char sep, bool skip_argv_0);
 
 #endif /* TEXTURAWASD_ARG */
-
-/* Implementation */
-#ifdef ARGS_IMPLEMENTATION
-#include "src/args.c"
-#endif

@@ -1,22 +1,15 @@
 # Common utils
 
-these are simple functions that are likely to be reused across different programs or stuff - stuff i'd expect to find in the standard library of a modern higher-level
-language. Small, meant to just be compiled in
+These helpers are small, reusable building blocks intended to feel like a lightweight standard library for C projects. They are meant to be compiled directly into the consuming application.
 
-## compatibility:
-some of these are "pure C" meaning they will (or at least, should) run anywhere C can, within reason. Others are for unix-like systems only. This is specified with the comment in the first line of all them.
+## Compatibility
 
-includes:
-### elevate
-- `const char* determine_elevator()` - determines elevator (`sudo` or `doas`)
-- `const char *elevate_command(const char *command)` - elevates the command
+Some modules are pure C and should work wherever C can compile. Others are Unix-like only and are marked as such in their headers.
 
-### have
-- `int command_exists(const char *command)` - `0` if it doesn't, `1` if it does
-- `const char *which(const char *command)` - you should know what which is
+## Public modules
 
 ### simple_strings
-A very simple strings implementation for C. (not professional do not use for anything load-bearing). The struct struct looks like this:
+A very simple strings implementation for C. (not professional do not use for anything load-bearing). The type looks like this:
 ```c
 typedef struct String {
     char *data;
@@ -25,58 +18,150 @@ typedef struct String {
 } string;
 #define str string
 ```
-Functions:
-- `str str_create(const char *src)` - create a new string from a C string
-- `str str_with_cap(size_t cap)` - same but with initial capacity
-- `void str_destroy(str *s)` - free the string's allocated memory
-- `const char *cstr(const str *s)` - simply get .data (turn back into a normal C string):
-```c
-#define to_cstr(s) cstr(s) /* alias for cstr() */
-```
-- `str *str_append(str *s, const char *suffix)` - append a C string to the string. returns pointer for chaining
-- `str *str_prepend(str *s, const char *prefix)` - prepend a C string to the sstring. Returns pointer for chaining
-- `str *str_trim(str *s)` - trims off leading and trailing whitespace
-- `str *str_ltrim(str *s)` - trims off the left (or leading) whitespace (just a pointer to the desired location)
-- `str *str_rtrim(str *s)` - trims off the right (or trailing) whitespace (returns the string)
-- `str *to_upper(str *s)` - uppercases the string, returns pointer
-- `str *to_lower(str *s)` - same thing, lowercasing
+
+Functions include:
+- `str str_create(const char *src)`
+- `str str_with_cap(size_t cap)`
+- `void str_destroy(str *s)`
+- `const char *cstr(const str *s)`
+- `str *str_append(str *s, const char *suffix)`
+- `str *str_prepend(str *s, const char *prefix)`
+- `str *str_trim(str *s)`
+- `str *str_ltrim(str *s)`
+- `str *str_rtrim(str *s)`
+- `str *str_chomp(str *s)`
+- `str *str_chomp_all(str *s)`
+- `str *str_chop(str *s)`
+- `str *str_chop_n(str *s, size_t n)`
+- `str *to_upper(str *s)`
+- `str *to_lower(str *s)`
 - `bool str_ends_with(const str *s, const char *suffix)`
 - `bool str_starts_with(const str *s, const char *prefix)`
 - `const char *str_find(const str *s, const char *substr)`
-- `str str_quoted_substring(const char *src)` - this is a weird one: it finds a quoted substring. for instance: input is `eurgn"josdSC"IUVIRV`, then output is `josdSC`
-- `str str_join(const char *sep, const char **strs, size_t count)` - join array of C strings with separator
-- `str str_repeat(const char *src, int n)` - repeat a number `n` of times
-- `str str_replace(const char *src, const char *old, const char *new_str)` - like `tr`
-- `str str_remove_prefix(const char *src, const char *prefix)` - a sort of --exec for `str_starts_with`, you know what I mean?
-- `str str_remove_suffix(const char *src, const char *suffix)` - same as above but suffix
+- `str str_quoted_substring(const char *src)`
+- `str str_join(const char *sep, const char **strs, size_t count)`
+- `str str_join_strs(const char *sep, const char strings[], size_t count)`
+- `str str_repeat(const char *src, int n)`
+- `str str_replace(const char *src, const char *old, const char *new_str)`
+- `str str_remove_prefix(const char *src, const char *prefix)`
+- `str str_remove_suffix(const char *src, const char *suffix)`
+- `bool str_eq(const str *a, const str *b)`
+- `int str_cmp(const str *a, const str *b)`
+- `void str_clear(str *s)`
+- `void str_reserve(str *s, size_t cap)`
+- `str str_substr(const str *s, size_t start, size_t len)`
+- `str *str_insert(str *s, size_t pos, const char *substr)`
+- `str *str_erase(str *s, size_t pos, size_t len)`
+- `str str_clone(const str *s)`
+- `str *str_split(const str *s, const char *delim, size_t *out_count)`
 
-### which_os
-- `const char *try_to_determine_linux_distro(const bool like)` - tries to determine the linux distro, base on `lsb_release` and `/etc/os-release`. If bool `like` is provided, also get ID_LIKE from /etc/os-release. Returns const char *, `"linux"` if it failed to determine the distro.
+### args
+- `bool arg_is_present(const char *arg, int argc, char **argv)`
+- `bool arg_is_present_with_value(const char *arg, const char *value, int argc, char **argv)`
+- `bool arg_is_present_at_nth_position(const char *arg, int n, int argc, char **argv)`
+- `bool arg_is_in_list(const char *arg, const char *list)`
+- `str get_arg_value(const char *arg, int argc, char **argv)`
+- `bool config_arg_is_val(const char *key, const char *val, int argc, char **argv)`
+- `str all_args_to_string(int argc, char **argv, char sep, bool skip_argv_0)`
 
-### process_utils
-- `int run(const char *cmd)` - old function, just runs a thing
-- `char *capture_output(const char *cmd)` - runs a thing and gets the output
-- `int run_quiet(const char *cmd)` - runs a thing and explicitly discards the output
-- `bool is_process_running(pid_t pid)` - shorthand to check if the is running
-- `pid_t pidof(const char *name)` - pidof without shelling out
-
-### path_utils
-- `str expand_home(const char *path)` - expands a path string with `~` in it
-- `str path_join(const char *a, const char *b)` - joins two paths
-- `str canonical_path(const char *path)` - get the actual, real path
-- `str file_extension(const char *path)` - get the file extension of the given file. Not for hidden files or files wit no extension.
-- `str tidy_up_path(const char *path)` - clean up the path (remove duplicated `/`, only leave the final `/` if the last item is actually a directory)
+### elevate
+- `const char *determine_elevator(void)`
+- `const char *elevate_command(const char *command)`
 
 ### file_utils
 - `bool file_exists(const char *path)`
 - `bool dir_exists(const char *path)`
 - `bool is_symlink(const char *path)`
-- `size_t file_size(const char *path)` in bytes
+- `size_t file_size(const char *path)`
 - `str read_entire_file(const char *path)`
 - `void write_entire_file(const char *path, const char *contents)`
 - `int file_line_count(const char *path)`
-- `bool file_is_lines_long(const char *path, int line_count, const char *least_or_most)` - the third argument can be `"least"` to check if the file is at ~ _`line_count`_ lines long, `"most"` ~~, and `NULL` to check if the file is *exactly* _`line_count`_ lines long
+- `bool file_is_lines_long(const char *path, int line_count, const char *least_or_most)`
 - `str read_lines(const char *path, int line_count, bool skip_empty, bool trim_newline)`
 
+### have
+- `int command_exists(const char *command)`
+- `const char *which(const char *command)`
+
+### parsing_utils
+- `int parse_int(const char *s)`
+- `long parse_long(const char *s)`
+- `bool parse_bool(const char *s)`
+- `bool is_numeric(const char *s)`
+
+### path_utils
+- `str expand_home(const char *path)`
+- `str path_join(const char *a, const char *b)`
+- `str canonical_path(const char *path)`
+- `str file_extension(const char *path)`
+- `str tidy_up_path(const char *path)`
+
+### process_utils
+- `int run(const char *cmd)`
+- `char *capture_output(const char *cmd)`
+- `int run_quiet(const char *cmd)`
+- `bool is_process_running(pid_t pid)`
+- `pid_t pidof(const char *name)`
+- `int process_spawn(const char *path, char *const argv[], char *const envp[], const process_spawn_options *options, pid_t *pid_out)`
+- `int process_wait(pid_t pid, int *exit_status_out)`
+- `int process_exec(const char *path, char *const argv[], char *const envp[], const process_spawn_options *options, bool capture_stdout, bool capture_stderr, char **stdout_data, char **stderr_data, int *exit_status_out)`
+
+### unit_utils
+- `double meter_to_kilometer(double meters)`
+- `double kilometer_to_meter(double kilometers)`
+- `double meter_to_foot(double meters)`
+- `double foot_to_meter(double feet)`
+- `double kilometer_to_mile(double kilometers)`
+- `double mile_to_kilometer(double miles)`
+- `double meter_to_mile(double meters)`
+- `double mile_to_meter(double miles)`
+- `double kilometer_to_foot(double kilometers)`
+- `double square_meter_to_square_foot(double m2)`
+- `double square_foot_to_square_meter(double ft2)`
+- `double acre_to_square_meter(double acres)`
+- `double square_meter_to_acre(double m2)`
+- `double kilogram_to_gram(double kg)`
+- `double gram_to_kilogram(double g)`
+- `double kilogram_to_pound(double kg)`
+- `double pound_to_kilogram(double lb)`
+- `double celsius_to_fahrenheit(double c)`
+- `double fahrenheit_to_celsius(double f)`
+- `double celsius_to_kelvin(double c)`
+- `double kelvin_to_celsius(double k)`
+- `double fahrenheit_to_kelvin(double f)`
+- `double kelvin_to_fahrenheit(double k)`
+- `double liter_to_cubic_meter(double liters)`
+- `double cubic_meter_to_liter(double m3)`
+- `double liter_to_gallon(double liters)`
+- `double gallon_to_liter(double gallons)`
+- `double mps_to_kmph(double mps)`
+- `double kmph_to_mps(double kmph)`
+- `double mps_to_mph(double mps)`
+- `double mph_to_mps(double mph)`
+- `double kmph_to_mph(double kmph)`
+- `double mph_to_kmph(double mph)`
+- `double pascal_to_psi(double pa)`
+- `double psi_to_pascal(double psi)`
+- `double pascal_to_bar(double pa)`
+- `double bar_to_pascal(double bar)`
+- `double pascal_to_atm(double pa)`
+- `double atm_to_pascal(double atm)`
+- `double joule_to_calorie(double j)`
+- `double calorie_to_joule(double cal)`
+- `double joule_to_kwh(double j)`
+- `double kwh_to_joule(double kwh)`
+- `double watt_to_horsepower(double w)`
+- `double horsepower_to_watt(double hp)`
+- `double degree_to_radian(double deg)`
+- `double radian_to_degree(double rad)`
+- `double byte_to_kibibyte(double bytes)`
+- `double kibibyte_to_byte(double kib)`
+- `double byte_to_kilobyte(double bytes)`
+- `double kilobyte_to_byte(double kb)`
+
+### which_os
+- `const char *try_to_determine_linux_distro(const bool like)`
+- `const char *try_to_determine_windows_version(void)`
+
 ### httpsrv
-- `int http_server(const char *file_to_serve_path)` - serves a file. defaults to "index.html" if no file is specified. (if defined _STANDALONE_HTTPSRV, function is int main(int argc, char **argv))
+- `int http_server(const char *file_to_serve_path, int port)`

@@ -11,8 +11,3 @@ bool parse_bool(const char *s);
 bool is_numeric(const char *s);
 
 #endif /* TEXTURAWASD_PARSING_UTILS_H */
-
-/* Implementation */
-#ifdef PARSING_UTILS_IMPLEMENTATION
-#include "src/parsing_utils.c"
-#endif

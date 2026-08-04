@@ -15,8 +15,3 @@ const char *determine_elevator();
 const char *elevate_command(const char *command);
 
 #endif /* ELEVATE_H */
-
-/* Implementation */
-#ifdef ELEVATE_IMPLEMENTATION
-#include "src/elevate.c"
-#endif

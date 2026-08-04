@@ -7,14 +7,3 @@
 int https_server(const char *file_to_serve_path);
 
 #endif
-
-/* Implementation */
-#ifdef _WIN32
-#ifdef _HTTPSRV_IMPLEMENTATION
-#include "src/httpsrv-tls_windows.c"
-#endif
-#else
-#ifdef _HTTPSRV_IMPLEMENTATION
-#include "src/httpsrv-tls.c"
-#endif
-#endif

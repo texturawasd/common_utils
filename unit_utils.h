@@ -88,9 +88,4 @@ double kilobyte_to_byte(double kb);
 }
 #endif
 
-/* Implementation include when requested */
-#ifdef UNIT_UTILS_IMPLEMENTATION
-#include "src/unit_utils.c"
-#endif
-
 #endif /* UNIT_UTILS_H */

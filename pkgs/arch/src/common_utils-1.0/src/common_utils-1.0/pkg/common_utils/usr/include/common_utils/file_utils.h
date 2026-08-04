@@ -34,8 +34,3 @@ bool file_is_lines_long(const char *path, int line_count, const char *least_or_m
 str read_lines(const char *path, int line_count, bool skip_empty, bool trim_newline);
 
 #endif /* TEXTURAWASD_FILE_UTILS_H */
-
-/* Implementation */
-#ifdef FILE_UTILS_IMPLEMENTATION
-#include "src/file_utils.c"
-#endif

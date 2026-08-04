@@ -9,8 +9,3 @@
 #endif
 
 #endif /* UNIT_UTILS_H */
-
-/* Implementation */
-#ifdef UNIT_UTILS_IMPLEMENTATION
-#include "src/unit_utils.c"
-#endif

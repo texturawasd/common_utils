@@ -21,9 +21,31 @@ bool is_process_running(pid_t pid);
 /* pidof without shelling out */
 pid_t pidof(const char *name);
 
-#endif /* TEXTURAWASD_PROCESS_UTILS */
+/* robust fork/exec helpers */
+typedef struct {
+    const char *working_dir;
+    char *const *envp;
+    bool inherit_stdin;
+    bool inherit_stdout;
+    bool inherit_stderr;
+} process_spawn_options;
 
-/* Implementation */
-#ifdef PROCESS_UTILS_IMPLEMENTATION
-#include "src/process_utils.c"
-#endif
+int process_spawn(const char *path,
+                  char *const argv[],
+                  char *const envp[],
+                  const process_spawn_options *options,
+                  pid_t *pid_out);
+
+int process_wait(pid_t pid, int *exit_status_out);
+
+int process_exec(const char *path,
+                 char *const argv[],
+                 char *const envp[],
+                 const process_spawn_options *options,
+                 bool capture_stdout,
+                 bool capture_stderr,
+                 char **stdout_data,
+                 char **stderr_data,
+                 int *exit_status_out);
+
+#endif /* TEXTURAWASD_PROCESS_UTILS */

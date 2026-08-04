@@ -54,9 +54,3 @@ str *str_split(const str *s, const char *delim, size_t *out_count);
 #define NULL_STRING str_create("")
 
 #endif /* _SIMPLE_STRINGS_H */
-
-/* Implementation */
-#ifdef SIMPLE_STRINGS_IMPLEMENTATION
-#include "src/strings.c"
-#endif
-

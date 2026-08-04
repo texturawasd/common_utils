@@ -173,12 +173,3 @@ str *str_split(const str *s, const char *delim, size_t *out_count);
 #endif
 
 #endif /* _SIMPLE_STRINGS_H */
-
-/* Implementation */
-#ifdef SIMPLE_STRINGS_IMPLEMENTATION
-#include "src/strings.c"
-#include "src/utf8.c"
-#ifdef SIMPLE_STRINGS_GRAPHEME_CLUSTER_SUPPORT
-#include "src/grapheme.c"
-#endif
-#endif

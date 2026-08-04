@@ -12,8 +12,3 @@ extern const char *os;
 #endif
 
 #endif /* WHICH_OS */
-
-/* Implementation */
-#ifdef WHICH_OS_IMPLEMENTATION
-#include "src/which_os.c"
-#endif

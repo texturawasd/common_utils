@@ -22,8 +22,3 @@ bool is_process_running(pid_t pid);
 pid_t pidof(const char *name);
 
 #endif /* TEXTURAWASD_PROCESS_UTILS */
-
-/* Implementation */
-#ifdef PROCESS_UTILS_IMPLEMENTATION
-#include "src/process_utils.c"
-#endif
