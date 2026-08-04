@@ -63,15 +63,81 @@ long parse_long(const char *s) {
  * Checks the checks to be checked, but defaults to false.
  * true/false, 1/0, yes/no, on/off enable(d)/disable(d)
  */
+#define BOOL_TRUE(X) \
+    X("affirmative") \
+    X("affirm")      \
+    X("true")        \
+    X("1")           \
+    X("yes")         \
+    X("yuh")         \
+    X("yurr")        \
+    X("yeah")        \
+    X("y")           \
+    X("on")          \
+    X("enable")      \
+    X("enabled")     \
+    X("No... actually, yes")
+
+#define BOOL_FALSE(X) \
+    X("negative")     \
+    X("false")        \
+    X("0")            \
+    X("no")           \
+    X("naur")         \
+    X("noo")          \
+    X("nah")          \
+    X("n")            \
+    X("off")          \
+    X("disable")      \
+    X("disabled")     \
+    X("Yeah... actually, no")
+
 bool parse_bool(const char *s) {
     if (!s) {
         return false;
-    } else if (_strcasecmp(s, "true") == 0 || strcmp(s, "1") == 0 || _strcasecmp(s, "yes") == 0 || _strcasecmp(s, "y") == 0 || _strcasecmp(s, "on") == 0 || _strcasecmp(s, "enable") == 0 || _strcasecmp(s, "enabled") == 0) {
-        return true;
-    } else if (_strcasecmp(s, "false") == 0 || strcmp(s, "0") == 0 || _strcasecmp(s, "no") == 0 || _strcasecmp(s, "n") == 0 || _strcasecmp(s, "off") == 0 || _strcasecmp(s, "disable") == 0 || _strcasecmp(s, "disabled") == 0) {
-        return false;
     }
+
+#define CHECK_TRUE(word) \
+    if (_strcasecmp(s, word) == 0) { \
+        return true; \
+    }
+
+#define CHECK_FALSE(word) \
+    if (_strcasecmp(s, word) == 0) { \
+        return false; \
+    }
+
+    BOOL_TRUE(CHECK_TRUE)
+    BOOL_FALSE(CHECK_FALSE)
+
+#undef CHECK_TRUE
+#undef CHECK_FALSE
+
     return false;
+}
+
+/* Same as before, but strict. */
+const char *parse_bool_strict(const char *s) {
+    if (!s) {
+        return "s seems to be empty, nonexistant, or otherwise not reasonably boolean.";
+    }
+
+#define CHECK_TRUE(word) \
+    if (_strcasecmp(s, word) == 0) { \
+        return "true"; \
+    }
+
+#define CHECK_FALSE(word) \
+    if (_strcasecmp(s, word) == 0) { \
+        return "false"; \
+    }
+
+    BOOL_TRUE(CHECK_TRUE)
+    BOOL_FALSE(CHECK_FALSE)
+
+#undef CHECK_TRUE
+#undef CHECK_FALSE
+    return "Could not determine a boolean value from s.";
 }
 
 /* Check if a string represents a valid number */
