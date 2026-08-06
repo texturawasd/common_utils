@@ -55,6 +55,7 @@ int command_exists(const char *command) {
     return found;
 }
 
+/* Full path of the executable */
 const char *which(const char *command) {
     if (command == NULL || *command == '\0') {
         return NULL;
@@ -93,4 +94,13 @@ const char *which(const char *command) {
 
     free(path_copy);
     return result;
+}
+
+int command_exists_fuzzy(const char *command) {
+    if (!command) { return 0; }
+    if (command_exists(command) == 1) {
+        return 1;
+    }
+    fprintf(stderr, "unimplemented");
+    return 0;
 }

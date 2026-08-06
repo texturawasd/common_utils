@@ -1,21 +1,10 @@
 #ifndef SIMPLE_COLORS_H
 #define SIMPLE_COLORS_H
 
-/* ANSI Escape Sequence */
-#define ESC "\x1b["
+#ifndef SIMPLE_STYLE_H
+#include "style.h"
+#endif
 
-/* Reset */
-#define RESET ESC "0m"
-
-/* Text Styles */
-#define BOLD          ESC "1m"
-#define DIM           ESC "2m"
-#define ITALIC        ESC "3m"
-#define UNDERLINE     ESC "4m"
-#define BLINK         ESC "5m"
-#define REVERSE       ESC "7m"
-#define HIDDEN        ESC "8m"
-#define STRIKETHROUGH ESC "9m"
 
 /* Regular Foreground Colors */
 #define FG_BLACK      ESC "30m"
@@ -60,15 +49,5 @@
 /* 256-color helpers */
 #define FG256(n) "\x1b[38;5;" #n "m"
 #define BG256(n) "\x1b[48;5;" #n "m"
-
-/* Cursor Control */
-#define CURSOR_HOME    ESC "H"
-#define CLEAR_SCREEN   ESC "2J"
-#define CLEAR_LINE     ESC "2K"
-#define SAVE_CURSOR    ESC "s"
-#define RESTORE_CURSOR ESC "u"
-
-/* Convenience */
-#define COLOR_RESET RESET
 
 #endif /* SIMPLE_COLORS_H */
